@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background-color: #f5f7fb;
+  color: #1f2933;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  padding: 2rem;
+  background: white;
+}
+
+/* Couverture */
+.cover {
+  text-align: center;
+  padding: 3rem 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.cover h1 {
+  color: #4f46e5;
+  margin-bottom: 0.5rem;
+}
+
+.cover h2 {
+  margin: 0.5rem 0;
+}
+
+.date {
+  font-style: italic;
+  color: #6b7280;
+}
+
+blockquote {
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: #374151;
+}
+
+/* Sections */
+section {
+  margin-top: 3rem;
+}
+
+h2 {
+  color: #4f46e5;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+h3 {
+  margin-top: 1.5rem;
+  color: #1f2933;
+}
+
+/* Table des matières */
+#toc ol {
+  padding-left: 1.5rem;
+}
+
+#toc a {
+  text-decoration: none;
+  color: #4f46e5;
+}
+
+/* Projets */
+.project {
+  background-color: #f9fafb;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  border-left: 4px solid #4f46e5;
+}
+
+/* Listes */
+ul {
+  margin-left: 1.5rem;
+}
+
+/* Contact */
+#contact {
+  text-align: center;
+  margin-bottom: 2rem;
+}
