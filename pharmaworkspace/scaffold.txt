@@ -1,0 +1,794 @@
+// src/components/admin/invite-dialog.tsx
+'use client'
+
+import { useState } from 'react'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { useToast } from '@/components/ui/use-toast'
+import { UserPlus, Copy, Check, Loader2 } from 'lucide-react'
+import { createInvitation } from '@/lib/queries/admin'
+import { useProfile } from '@/contexts/profile-context'
+import { ROLE_LABELS } from '@/config/constants'
+import type { UserRole } from '@/types'
+
+type InviteDialogProps = {
+  onInviteSent: () => void
+}
+
+export function InviteDialog({ onInviteSent }: InviteDialogProps) {
+  const { pharmacy } = useProfile()
+  const { toast } = useToast()
+
+  const [open, setOpen] = useState(false)
+  const [email, setEmail] = useState('')
+  const [role, setRole] = useState<UserRole>('preparateur')
+  const [loading, setLoading] = useState(false)
+  const [generatedLink, setGeneratedLink] = useState<string | null>(null)
+  const [copied, setCopied] = useState(false)
+
+  const resetForm = () => {
+    setEmail('')
+    setRole('preparateur')
+    setGeneratedLink(null)
+    setCopied(false)
+  }
+
+  const handleOpenChange = (value: boolean) => {
+    setOpen(value)
+    if (!value) resetForm()
+  }
+
+  const handleSubmit = async () => {
+    if (!pharmacy || !email.trim()) return
+
+    setLoading(true)
+    const { data, error } = await createInvitation(pharmacy.id, email.trim(), role)
+    setLoading(false)
+
+    if (error || !data) {
+      toast({
+        title: 'Erreur',
+        description: error ?? "Impossible de créer l'invitation.",
+        variant: 'destructive',
+      })
+      return
+    }
+
+    const link = `${process.env.NEXT_PUBLIC_APP_URL}/invite/${data.token}`
+    setGeneratedLink(link)
+
+    toast({
+      title: 'Invitation créée',
+      description: `Un lien d'invitation a été généré pour ${email}.`,
+    })
+
+    onInviteSent()
+  }
+
+  const handleCopy = async () => {
+    if (!generatedLink) return
+
+    try {
+      await navigator.clipboard.writeText(generatedLink)
+      setCopied(true)
+      toast({ title: 'Lien copié dans le presse-papier' })
+      setTimeout(() => setCopied(false), 2000)
+    } catch {
+      toast({
+        title: 'Erreur',
+        description: 'Impossible de copier le lien.',
+        variant: 'destructive',
+      })
+    }
+  }
+
+  const invitableRoles: UserRole[] = ['adjoint', 'preparateur']
+
+  return (
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      <DialogTrigger asChild>
+        <Button>
+          <UserPlus className="mr-2 h-4 w-4" />
+          Inviter un membre
+        </Button>
+      </DialogTrigger>
+
+      <DialogContent className="sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Inviter un nouveau membre</DialogTitle>
+          <DialogDescription>
+            Un lien d&apos;invitation sera généré. Partagez-le avec le collaborateur.
+          </DialogDescription>
+        </DialogHeader>
+
+        {!generatedLink ? (
+          <div className="space-y-4 py-2">
+            <div className="space-y-2">
+              <Label htmlFor="invite-email">Adresse email</Label>
+              <Input
+                id="invite-email"
+                type="email"
+                placeholder="collaborateur@email.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={loading}
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="invite-role">Rôle</Label>
+              <Select
+                value={role}
+                onValueChange={(value) => setRole(value as UserRole)}
+                disabled={loading}
+              >
+                <SelectTrigger id="invite-role">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {invitableRoles.map((r) => (
+                    <SelectItem key={r} value={r}>
+                      {ROLE_LABELS[r]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-3 py-2">
+            <Label>Lien d&apos;invitation</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                readOnly
+                value={generatedLink}
+                className="text-sm font-mono"
+              />
+              <Button
+                type="button"
+                size="icon"
+                variant="outline"
+                onClick={handleCopy}
+              >
+                {copied ? (
+                  <Check className="h-4 w-4 text-green-600" />
+                ) : (
+                  <Copy className="h-4 w-4" />
+                )}
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Envoyez ce lien à <strong>{email}</strong> pour qu&apos;il rejoigne l&apos;officine
+              en tant que <strong>{ROLE_LABELS[role]}</strong>.
+            </p>
+          </div>
+        )}
+
+        <DialogFooter>
+          {!generatedLink ? (
+            <Button
+              onClick={handleSubmit}
+              disabled={loading || !email.trim()}
+            >
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              Générer le lien
+            </Button>
+          ) : (
+            <Button variant="outline" onClick={() => handleOpenChange(false)}>
+              Fermer
+            </Button>
+          )}
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}
+// src/components/admin/members-table.tsx
+'use client'
+
+import { useCallback, useEffect, useState } from 'react'
+import { DataTable } from '@/components/shared/data-table'
+import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { useToast } from '@/components/ui/use-toast'
+import { UserX, Loader2 } from 'lucide-react'
+import { useProfile } from '@/contexts/profile-context'
+import {
+  getPharmacyMembers,
+  getPendingInvitations,
+  updateMemberRole,
+  deactivateMember,
+  revokeInvitation,
+} from '@/lib/queries/admin'
+import { ROLE_LABELS } from '@/config/constants'
+import type { Profile, Invitation, UserRole } from '@/types'
+import type { Column } from '@/components/shared/data-table'
+import { InviteDialog } from './invite-dialog'
+
+const ROLE_BADGE_VARIANT: Record<UserRole, 'default' | 'secondary' | 'outline'> = {
+  titulaire: 'default',
+  adjoint: 'secondary',
+  preparateur: 'outline',
+}
+
+function formatLastLogin(date: string | null): string {
+  if (!date) return 'Jamais connecté'
+  return new Intl.DateTimeFormat('fr-FR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  }).format(new Date(date))
+}
+
+export function MembersTable() {
+  const { pharmacy, profile } = useProfile()
+  const { toast } = useToast()
+
+  const [members, setMembers] = useState<Profile[]>([])
+  const [invitations, setInvitations] = useState<Invitation[]>([])
+  const [loadingMembers, setLoadingMembers] = useState(true)
+  const [loadingInvitations, setLoadingInvitations] = useState(true)
+  const [updatingId, setUpdatingId] = useState<string | null>(null)
+
+  const fetchMembers = useCallback(async () => {
+    if (!pharmacy) return
+    setLoadingMembers(true)
+    const { data, error } = await getPharmacyMembers(pharmacy.id)
+    if (error) {
+      toast({ title: 'Erreur', description: error, variant: 'destructive' })
+    }
+    setMembers(data ?? [])
+    setLoadingMembers(false)
+  }, [pharmacy, toast])
+
+  const fetchInvitations = useCallback(async () => {
+    if (!pharmacy) return
+    setLoadingInvitations(true)
+    const { data, error } = await getPendingInvitations(pharmacy.id)
+    if (error) {
+      toast({ title: 'Erreur', description: error, variant: 'destructive' })
+    }
+    setInvitations(data ?? [])
+    setLoadingInvitations(false)
+  }, [pharmacy, toast])
+
+  useEffect(() => {
+    fetchMembers()
+    fetchInvitations()
+  }, [fetchMembers, fetchInvitations])
+
+  const handleRoleChange = async (memberId: string, newRole: UserRole) => {
+    setUpdatingId(memberId)
+    const { error } = await updateMemberRole(memberId, newRole)
+    setUpdatingId(null)
+
+    if (error) {
+      toast({ title: 'Erreur', description: error, variant: 'destructive' })
+      return
+    }
+
+    toast({ title: 'Rôle mis à jour' })
+    fetchMembers()
+  }
+
+  const handleDeactivate = async (memberId: string) => {
+    setUpdatingId(memberId)
+    const { error } = await deactivateMember(memberId)
+    setUpdatingId(null)
+
+    if (error) {
+      toast({ title: 'Erreur', description: error, variant: 'destructive' })
+      return
+    }
+
+    toast({ title: 'Membre désactivé' })
+    fetchMembers()
+  }
+
+  const handleRevokeInvitation = async (invitationId: string) => {
+    const { error } = await revokeInvitation(invitationId)
+
+    if (error) {
+      toast({ title: 'Erreur', description: error, variant: 'destructive' })
+      return
+    }
+
+    toast({ title: 'Invitation révoquée' })
+    fetchInvitations()
+  }
+
+  const assignableRoles: UserRole[] = ['adjoint', 'preparateur']
+
+  const memberColumns: Column<Profile>[] = [
+    {
+      key: 'display_name',
+      label: 'Nom',
+      sortable: true,
+      render: (_, row) => (
+        <div className="flex items-center gap-2">
+          <span className="font-medium">{row.display_name ?? '—'}</span>
+          {row.id === profile?.id && (
+            <Badge variant="outline" className="text-xs">Vous</Badge>
+          )}
+        </div>
+      ),
+    },
+    {
+      key: 'role',
+      label: 'Rôle',
+      render: (_, row) => {
+        const isSelf = row.id === profile?.id
+        const isTitulaire = row.role === 'titulaire'
+
+        if (isSelf || isTitulaire) {
+          return (
+            <Badge variant={ROLE_BADGE_VARIANT[row.role as UserRole]}>
+              {ROLE_LABELS[row.role as UserRole]}
+            </Badge>
+          )
+        }
+
+        return (
+          <Select
+            value={row.role}
+            onValueChange={(value) => handleRoleChange(row.id, value as UserRole)}
+            disabled={updatingId === row.id}
+          >
+            <SelectTrigger className="w-[140px] h-8">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {assignableRoles.map((r) => (
+                <SelectItem key={r} value={r}>
+                  {ROLE_LABELS[r]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )
+      },
+    },
+    {
+      key: 'is_active',
+      label: 'Statut',
+      render: (_, row) => (
+        <Badge variant={row.is_active ? 'default' : 'secondary'}>
+          {row.is_active ? 'Actif' : 'Inactif'}
+        </Badge>
+      ),
+    },
+    {
+      key: 'last_login',
+      label: 'Dernière connexion',
+      sortable: true,
+      render: (_, row) => (
+        <span className="text-sm text-muted-foreground">
+          {formatLastLogin(row.last_login)}
+        </span>
+      ),
+    },
+    {
+      key: 'actions',
+      label: '',
+      render: (_, row) => {
+        const isSelf = row.id === profile?.id
+        const isTitulaire = row.role === 'titulaire'
+
+        if (isSelf || isTitulaire || !row.is_active) return null
+
+        return (
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="text-destructive hover:text-destructive"
+                disabled={updatingId === row.id}
+              >
+                {updatingId === row.id ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <UserX className="h-4 w-4" />
+                )}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Désactiver ce membre ?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  {row.display_name ?? 'Ce membre'} ne pourra plus accéder à l&apos;officine.
+                  Son compte ne sera pas supprimé et pourra être réactivé.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Annuler</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => handleDeactivate(row.id)}
+                  className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                >
+                  Désactiver
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        )
+      },
+    },
+  ]
+
+  const invitationColumns: Column<Invitation>[] = [
+    {
+      key: 'email',
+      label: 'Email',
+      sortable: true,
+      render: (_, row) => (
+        <span className="font-medium">{row.email}</span>
+      ),
+    },
+    {
+      key: 'role',
+      label: 'Rôle',
+      render: (_, row) => (
+        <Badge variant={ROLE_BADGE_VARIANT[row.role as UserRole]}>
+          {ROLE_LABELS[row.role as UserRole]}
+        </Badge>
+      ),
+    },
+    {
+      key: 'created_at',
+      label: 'Envoyée le',
+      sortable: true,
+      render: (_, row) => (
+        <span className="text-sm text-muted-foreground">
+          {new Intl.DateTimeFormat('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+          }).format(new Date(row.created_at))}
+        </span>
+      ),
+    },
+    {
+      key: 'status',
+      label: 'Statut',
+      render: (_, row) => (
+        <Badge variant="outline">{row.status === 'pending' ? 'En attente' : row.status}</Badge>
+      ),
+    },
+    {
+      key: 'actions',
+      label: '',
+      render: (_, row) => (
+        <AlertDialog>
+          <AlertDialogTrigger asChild>
+            <Button variant="ghost" size="sm" className="text-destructive hover:text-destructive">
+              Révoquer
+            </Button>
+          </AlertDialogTrigger>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Révoquer cette invitation ?</AlertDialogTitle>
+              <AlertDialogDescription>
+                L&apos;invitation envoyée à {row.email} sera annulée.
+                Le lien ne sera plus utilisable.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Annuler</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={() => handleRevokeInvitation(row.id)}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                Révoquer
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
+      ),
+    },
+  ]
+
+  return (
+    <div className="space-y-8">
+      {/* Header with invite button */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-lg font-semibold">Membres de l&apos;équipe</h2>
+          <p className="text-sm text-muted-foreground">
+            Gérez les accès et les rôles de votre équipe.
+          </p>
+        </div>
+        <InviteDialog onInviteSent={fetchInvitations} />
+      </div>
+
+      {/* Active members table */}
+      <DataTable<Profile>
+        data={members}
+        columns={memberColumns}
+        loading={loadingMembers}
+        emptyMessage="Aucun membre trouvé."
+      />
+
+      {/* Pending invitations */}
+      <div className="space-y-4">
+        <div>
+          <h3 className="text-md font-semibold">Invitations en attente</h3>
+          <p className="text-sm text-muted-foreground">
+            Invitations envoyées qui n&apos;ont pas encore été acceptées.
+          </p>
+        </div>
+
+        <DataTable<Invitation>
+          data={invitations}
+          columns={invitationColumns}
+          loading={loadingInvitations}
+          emptyMessage="Aucune invitation en attente."
+        />
+      </div>
+    </div>
+  )
+}
+// src/components/admin/pharmacy-settings-form.tsx
+'use client'
+
+import { useEffect, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { Textarea } from '@/components/ui/textarea'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import { useToast } from '@/components/ui/use-toast'
+import { Loader2, Upload, Building2 } from 'lucide-react'
+import { useProfile } from '@/contexts/profile-context'
+import { updatePharmacySettings } from '@/lib/queries/admin'
+import type { Pharmacy } from '@/types'
+
+type FormData = {
+  name: string
+  finess: string
+  address: string
+  logo_url: string
+}
+
+export function PharmacySettingsForm() {
+  const { pharmacy } = useProfile()
+  const { toast } = useToast()
+
+  const [form, setForm] = useState<FormData>({
+    name: '',
+    finess: '',
+    address: '',
+    logo_url: '',
+  })
+  const [loading, setLoading] = useState(false)
+  const [dirty, setDirty] = useState(false)
+
+  useEffect(() => {
+    if (pharmacy) {
+      setForm({
+        name: pharmacy.name ?? '',
+        finess: pharmacy.finess ?? '',
+        address: pharmacy.address ?? '',
+        logo_url: pharmacy.logo_url ?? '',
+      })
+    }
+  }, [pharmacy])
+
+  const handleChange = (field: keyof FormData, value: string) => {
+    setForm((prev) => ({ ...prev, [field]: value }))
+    setDirty(true)
+  }
+
+  const handleLogoSimulation = () => {
+    // MVP: simulated upload — sets a placeholder URL
+    const simulatedUrl = `https://placeholder.co/200x200?text=${encodeURIComponent(form.name || 'Logo')}`
+    handleChange('logo_url', simulatedUrl)
+    toast({
+      title: 'Logo simulé',
+      description: 'Un logo placeholder a été généré pour le MVP.',
+    })
+  }
+
+  const handleSubmit = async () => {
+    if (!pharmacy) return
+
+    setLoading(true)
+
+    const payload: Partial<Pick<Pharmacy, 'name' | 'finess' | 'address' | 'logo_url'>> = {}
+
+    if (form.name !== (pharmacy.name ?? '')) payload.name = form.name
+    if (form.finess !== (pharmacy.finess ?? '')) payload.finess = form.finess
+    if (form.address !== (pharmacy.address ?? '')) payload.address = form.address
+    if (form.logo_url !== (pharmacy.logo_url ?? '')) payload.logo_url = form.logo_url
+
+    if (Object.keys(payload).length === 0) {
+      setLoading(false)
+      toast({ title: 'Aucune modification détectée.' })
+      return
+    }
+
+    const { error } = await updatePharmacySettings(pharmacy.id, payload)
+    setLoading(false)
+
+    if (error) {
+      toast({ title: 'Erreur', description: error, variant: 'destructive' })
+      return
+    }
+
+    toast({ title: 'Paramètres enregistrés', description: "Les informations de l'officine ont été mises à jour." })
+    setDirty(false)
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <Building2 className="h-5 w-5" />
+          Informations de l&apos;officine
+        </CardTitle>
+        <CardDescription>
+          Modifiez les informations générales de votre pharmacie.
+        </CardDescription>
+      </CardHeader>
+
+      <CardContent className="space-y-6">
+        <div className="space-y-2">
+          <Label htmlFor="pharmacy-name">Nom de l&apos;officine</Label>
+          <Input
+            id="pharmacy-name"
+            value={form.name}
+            onChange={(e) => handleChange('name', e.target.value)}
+            placeholder="Pharmacie du Centre"
+            disabled={loading}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="pharmacy-finess">Numéro FINESS</Label>
+          <Input
+            id="pharmacy-finess"
+            value={form.finess}
+            onChange={(e) => handleChange('finess', e.target.value)}
+            placeholder="0123456789"
+            maxLength={9}
+            disabled={loading}
+          />
+          <p className="text-xs text-muted-foreground">
+            Identifiant unique à 9 chiffres de l&apos;établissement.
+          </p>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="pharmacy-address">Adresse</Label>
+          <Textarea
+            id="pharmacy-address"
+            value={form.address}
+            onChange={(e) => handleChange('address', e.target.value)}
+            placeholder="12 rue de la Santé, 75013 Paris"
+            rows={3}
+            disabled={loading}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label>Logo</Label>
+          <div className="flex items-center gap-4">
+            {form.logo_url ? (
+              <img
+                src={form.logo_url}
+                alt="Logo de l'officine"
+                className="h-16 w-16 rounded-lg border object-cover"
+              />
+            ) : (
+              <div className="flex h-16 w-16 items-center justify-center rounded-lg border border-dashed bg-muted">
+                <Building2 className="h-6 w-6 text-muted-foreground" />
+              </div>
+            )}
+            <div className="space-y-1">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={handleLogoSimulation}
+                disabled={loading}
+              >
+                <Upload className="mr-2 h-4 w-4" />
+                Changer le logo
+              </Button>
+              <p className="text-xs text-muted-foreground">
+                Upload simulé pour le MVP.
+              </p>
+            </div>
+          </div>
+        </div>
+      </CardContent>
+
+      <CardFooter className="flex justify-end border-t pt-6">
+        <Button onClick={handleSubmit} disabled={loading || !dirty}>
+          {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Enregistrer les modifications
+        </Button>
+      </CardFooter>
+    </Card>
+  )
+}
+// src/app/(admin)/admin/page.tsx
+import { MembersTable } from '@/components/admin/members-table'
+
+export default function AdminPage() {
+  return (
+    <div className="space-y-6 p-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Administration</h1>
+        <p className="text-muted-foreground">
+          Gérez votre équipe et les accès à l&apos;officine.
+        </p>
+      </div>
+
+      <MembersTable />
+    </div>
+  )
+}
+// src/app/(admin)/admin/settings/page.tsx
+import { PharmacySettingsForm } from '@/components/admin/pharmacy-settings-form'
+
+export default function AdminSettingsPage() {
+  return (
+    <div className="space-y-6 p-6">
+      <div>
+        <h1 className="text-2xl font-bold tracking-tight">Paramètres de l&apos;officine</h1>
+        <p className="text-muted-foreground">
+          Configurez les informations de votre pharmacie.
+        </p>
+      </div>
+
+      <div className="max-w-2xl">
+        <PharmacySettingsForm />
+      </div>
+    </div>
+  )
+}

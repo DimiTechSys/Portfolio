@@ -1,0 +1,5 @@
+export { useTasks } from '@/features/tasks/hooks/use-tasks'
+export { useTaskSections, type TaskSectionResult } from '@/features/tasks/hooks/use-task-sections'
+export { useTaskSection, type UseTaskSectionResult } from '@/features/tasks/hooks/use-task-section'
+export { tasksService } from '@/features/tasks/services/tasks.service'
+export { TASK_DONE_REQUIRES_ASSIGNEE } from '@/lib/queries/tasks'

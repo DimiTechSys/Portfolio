@@ -1,0 +1,86 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+enum RouteType {
+  FIXED
+  CUSTOM
+}
+
+enum VehicleCategory {
+  sedan
+  business
+  van
+  luxury
+  suv
+  moto
+}
+
+enum PaymentMethod {
+  STRIPE
+  ON_DAY
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+  REFUNDED
+}
+
+model Booking {
+  id                String   @id @default(uuid())
+  booking_reference String   @unique
+  created_at        DateTime @default(now())
+  status            BookingStatus
+  route_type        RouteType
+  origin            String
+  destination       String
+  pickup_datetime   DateTime
+  vehicle_category  VehicleCategory
+  passengers        Int
+  client_name       String
+  client_email      String
+  client_phone      String
+  flight_reference  String?
+  notes             String?
+  payment_method    PaymentMethod
+  amount_charged    Decimal
+  stripe_payment_id String?
+  payment_status    PaymentStatus
+  operator_notified Boolean @default(false)
+}
+
+model PricingRoute {
+  id                   String  @id @default(uuid())
+  origin_label         String
+  destination_label    String
+  origin_place_id      String
+  destination_place_id String
+  price_sedan          Decimal
+  price_business       Decimal
+  price_van            Decimal
+  price_luxury         Decimal
+  price_suv            Decimal
+  price_moto           Decimal
+  group                String  // "airports" | "stations" | "tours" | "other"
+}
+
+model Config {
+  key   String @id
+  value String
+}

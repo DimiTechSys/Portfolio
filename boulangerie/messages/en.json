@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "catalogue": "Catalogue",
+    "maison": "Our House",
+    "order": "Order"
+  },
+  "hero": {
+    "eyebrow": "Artisan bakery · {city}",
+    "title": "The prestige bakery of Algiers' finest addresses.",
+    "subtitle": "Viennoiseries, traditional breads and exceptional pastries, delivered each morning to the cafés, hotels and tables that define the elegance of Algiers.",
+    "ctaOrder": "Order on WhatsApp"
+  },
+  "catalogue": {
+    "eyebrow": "The catalogue",
+    "title": "Our menu",
+    "subtitle": "Products prepared fresh every day, in the purest tradition.",
+    "empty": "The catalogue is being prepared.",
+    "uncategorized": "Our creations",
+    "view": "View product"
+  },
+  "product": {
+    "back": "Back to catalogue",
+    "order": "Order on WhatsApp",
+    "call": "Call us",
+    "notFound": "This product does not exist or is no longer available.",
+    "backShort": "Catalogue"
+  },
+  "maison": {
+    "eyebrow": "Our House",
+    "title": "Baking excellence, at the heart of Algiers",
+    "lead": "A house born of a single obsession: bringing French baking craft to the highest level of exigence, for the addresses that shape the taste of Algiers.",
+    "p1": "Every morning, our artisans hand-shape butter viennoiseries, slow-fermented traditional breads and exceptional pastries. No production line, no shortcuts — only the right gesture and carefully chosen ingredients.",
+    "p2": "We built this house for a clientele that never compromises on quality: the great modern cafés, prestigious hotels and restaurants of Algiers, and individuals in search of the very best.",
+    "p3": "Our catalogue is deliberately tight, conceived as a curated menu: each product earns its place because, in our eyes, it is beyond reproach.",
+    "value1Title": "Handmade",
+    "value1Text": "Artisanal shaping, every day, with no industrialisation.",
+    "value2Title": "Exceptional ingredients",
+    "value2Text": "AOP butter, natural leavens, hand-selected raw materials.",
+    "value3Title": "In service of prestige",
+    "value3Text": "An exigence designed for the finest tables of Algiers.",
+    "cta": "Compose my order"
+  },
+  "contact": {
+    "eyebrow": "Place an order",
+    "title": "Let's talk about your needs",
+    "subtitle": "Leave us your details and we'll call you back to compose your bespoke order. You can also reach us directly.",
+    "callLabel": "Call us",
+    "whatsappLabel": "WhatsApp",
+    "formTitle": "Request a callback",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone",
+    "message": "Your need (optional)",
+    "messagePlaceholder": "E.g. daily viennoiserie delivery for my café…",
+    "submit": "Request a callback",
+    "sending": "Sending…",
+    "successTitle": "Request received",
+    "successText": "Our team will call you back very soon to finalise your order.",
+    "errName": "Please provide your first and last name.",
+    "errPhone": "Please provide a valid phone number.",
+    "privacy": "We use this information solely to call you back."
+  },
+  "footer": {
+    "tagline": "Prestige bakery in {city}.",
+    "explore": "Explore",
+    "contactTitle": "Contact us",
+    "rights": "All rights reserved.",
+    "admin": "Manager area"
+  },
+  "order": {
+    "whatsappGlobal": "Hello {shop}, I would like to place an order.",
+    "whatsappProduct": "Hello {shop}, I would like to order: {product} ({price})."
+  },
+  "language": {
+    "label": "Language",
+    "en": "English",
+    "fr": "Français"
+  }
+}

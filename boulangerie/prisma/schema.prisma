@@ -1,0 +1,77 @@
+// Schéma de la boulangerie premium — catalogue, demandes de rappel, commandes, paramètres.
+// Base : PostgreSQL (Supabase). Connexion via @prisma/adapter-pg + variables d'env.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Produit affiché dans la vitrine (front) et géré au back-office.
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  category    String?
+  description String?
+  imageUrl    String? // photo de couverture (= images[0]), conservée pour compatibilité
+  images      String[] @default([]) // galerie : toutes les photos, dans l'ordre d'affichage
+  // Prix en dinars algériens (DA), stockés en entier (pas de centimes).
+  priceDA     Int // prix de vente affiché au public
+  costDA      Int @default(0) // coût de production — JAMAIS exposé au front public
+  visible     Boolean  @default(true)
+  sortOrder   Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  orderItems  OrderItem[]
+}
+
+// Demande de rappel laissée par un client sur la vitrine.
+model Lead {
+  id        Int        @id @default(autoincrement())
+  firstName String
+  lastName  String
+  phone     String
+  message   String?
+  status    LeadStatus @default(TO_CALL)
+  createdAt DateTime   @default(now())
+}
+
+enum LeadStatus {
+  TO_CALL   // À rappeler
+  CALLED    // Rappelé
+  CONVERTED // Converti en commande
+  DROPPED   // Sans suite
+}
+
+// Commande validée, saisie au back-office pour le suivi et le calcul des marges.
+model Order {
+  id            Int         @id @default(autoincrement())
+  customerName  String?
+  customerPhone String?
+  note          String?
+  createdAt     DateTime    @default(now())
+  items         OrderItem[]
+}
+
+// Ligne de commande. On fige (snapshot) le prix et le coût au moment de la saisie
+// pour que les marges historiques restent justes même si le catalogue change ensuite.
+model OrderItem {
+  id          Int      @id @default(autoincrement())
+  orderId     Int
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId   Int?
+  product     Product? @relation(fields: [productId], references: [id], onDelete: SetNull)
+  productName String
+  qty         Int      @default(1)
+  unitPriceDA Int // prix de vente unitaire au moment de la commande
+  unitCostDA  Int // coût unitaire au moment de la commande
+}
+
+// Paramètres clé/valeur (nom de l'enseigne, WhatsApp, téléphone, mot de passe haché...).
+model Setting {
+  key   String @id
+  value String
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Occitanie Verte - Entretien d'Espaces Verts en Occitanie",
+  "short_name": "Occitanie Verte",
+  "description": "Services professionnels d'entretien de jardins en Occitanie. Coupe de gazon, taille de haies, mise en beauté.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#16a34a",
+  "background_color": "#ffffff",
+  "lang": "fr",
+  "dir": "ltr",
+  "categories": ["business", "lifestyle"],
+  "icons": [
+    {
+      "src": "/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/web-app-manifest-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/web-app-manifest-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/se-lancer-en-jardinage.webp",
+      "sizes": "1200x800",
+      "type": "image/webp",
+      "label": "Occitanie Verte - Services de jardinage professionnel"
+    }
+  ]
+}

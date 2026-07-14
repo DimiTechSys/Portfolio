@@ -1,169 +1,99 @@
-<<<<<<< HEAD
-# Portfolio
+<h1 align="center">Portfolio — Dimitri Voissier</h1>
 
+<p align="center">
+  Développeur web full-stack. Je conçois et livre des <strong>applications web sur mesure</strong> :<br/>
+  vitrines premium, back-offices métier et SaaS complets.
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-000000?style=flat&logo=next.js&logoColor=white" alt="Next.js"/>
+  <img src="https://img.shields.io/badge/React-20232A?style=flat&logo=react&logoColor=61DAFB" alt="React"/>
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=typescript&logoColor=white" alt="TypeScript"/>
+  <img src="https://img.shields.io/badge/Supabase-3FCF8E?style=flat&logo=supabase&logoColor=white" alt="Supabase"/>
+  <img src="https://img.shields.io/badge/Prisma-2D3748?style=flat&logo=prisma&logoColor=white" alt="Prisma"/>
+  <img src="https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white" alt="Tailwind CSS"/>
+  <img src="https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white" alt="Python"/>
+</p>
 
-## Getting started
+---
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Ce dépôt regroupe une sélection de mes projets, chacun dans son propre dossier.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## 🚀 Projets
 
-## Add your files
+| Projet | En bref | Stack principale | Dossier |
+|---|---|---|---|
+| **PharmaWorkspace** | SaaS B2B pour officines : tâches, OCR d'ordonnances par IA, ruptures de stock, commandes fournisseurs — multi-tenant | Next.js 16 · Supabase · Stripe · Mistral OCR | [`/pharmaworkspace`](./pharmaworkspace) |
+| **La Mie Dorée** | Catalogue premium + back-office pour une boulangerie de prestige (Alger), bilingue FR/EN | Next.js 16 · Prisma · next-intl | [`/boulangerie`](./boulangerie) |
+| **Capital Transfer** | Réservation de chauffeur privé à Paris : tarif fixe, paiement, SMS de confirmation | Next.js 16 · Stripe · Twilio · Leaflet | [`/capital-transfer`](./capital-transfer) |
+| **MBCZ Drive** | Vitrine + prise de contact pour un service de chauffeur privé Mercedes | React · Vite · Drizzle · Neon | [`/mbczdrive`](./mbczdrive) |
+| **Flagship** | Back-office de concession automobile : stock, ventes, tableaux de bord | Next.js 15 · Supabase · Recharts | [`/flagship`](./flagship) |
+| **Nosoclean** | Assistant IA en hygiène professionnelle : chat en streaming + reconnaissance vocale | Vite · React · Claude API | [`/nosoclean`](./nosoclean) |
+| **Ostéopathe.pro** | Site vitrine pour un cabinet d'ostéopathie | Next.js 16 · Tailwind | [`/osteopathe`](./osteopathe) |
+| **Occitanie Verte** | Site vitrine pour un paysagiste — statique, optimisé SEO | HTML · CSS · JS | [`/occitanie-verte`](./occitanie-verte) |
+| **Robotique** | Portfolio académique « Futur Ingénieur en Robotique » (ESIEA) — projets Raspberry Pi & Arduino | React · Vite | [`/robotique`](./robotique) |
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+> 💡 *Ajoute ici les liens de démo (Vercel, etc.) quand tes projets sont déployés.*
 
-```
-cd existing_repo
-git remote add origin https://gitlab.esiea.fr/Shoot2Poney/portfolio.git
-git branch -M main
-git push -uf origin main
-```
+---
 
-## Integrate with your tools
+## 🧩 En détail
 
-- [ ] [Set up project integrations](https://gitlab.esiea.fr/Shoot2Poney/portfolio/-/settings/integrations)
+### PharmaWorkspace — SaaS pour pharmacies
+Plateforme SaaS **multi-tenant** (une officine = un espace isolé) qui digitalise le quotidien
+d'une pharmacie : gestion des tâches, lecture d'ordonnances par **OCR IA**, suivi des **ruptures
+de stock** (scan CIP13 + synchro ANSM), commandes fournisseurs, location de matériel médical,
+agenda et notifications temps réel.
+**Stack :** Next.js 16 (App Router) · Supabase (Auth, Postgres, Storage, Realtime) ·
+TanStack Query · Stripe · OCR Mistral · Sentry · PostHog.
 
-## Collaborate with your team
+### La Mie Dorée — Boulangerie premium
+Application à **deux faces** partageant la même base : une **vitrine bilingue** (héros sombre &
+doré, catalogue, commande via WhatsApp pré-rempli) et un **back-office gérant** protégé
+(tableau de bord CA/marge, gestion du catalogue et des coûts de production, suivi des commandes).
+**Stack :** Next.js 16 · Prisma · next-intl (FR/EN) · Tailwind 4.
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+### Capital Transfer — Chauffeur privé Paris
+Service de réservation VTC haut de gamme : sélection du trajet sur **carte interactive**,
+**tarif fixe** confirmé avant départ, **paiement en ligne** et **SMS** de confirmation.
+**Stack :** Next.js 16 · Stripe · Twilio · React-Leaflet · Resend.
 
-## Test and Deploy
+### MBCZ Drive — Transferts Mercedes
+Vitrine élégante et formulaire de contact validé pour un service de chauffeur privé haut de gamme
+(transferts aéroport, événements, déplacements d'affaires).
+**Stack :** React · Vite · Drizzle ORM · Neon · Radix UI.
 
-Use the built-in continuous integration in GitLab.
+### Flagship — Back-office concession auto
+Outil interne pour une concession : gestion du stock de véhicules, suivi des ventes et
+**tableaux de bord** graphiques.
+**Stack :** Next.js 15 · Supabase · Recharts · Tailwind.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+### Nosoclean — Assistant IA hygiène
+Chatbot spécialisé en hygiène professionnelle : réponses **en streaming**, **reconnaissance
+vocale** en français et contexte métier dédié.
+**Stack :** Vite · React · API Claude (Anthropic) · Express.
 
-***
+### Ostéopathe.pro & Occitanie Verte — Sites vitrines
+Deux sites vitrines orientés conversion : présentation des services, référencement soigné et
+prise de contact. Ostéopathe.pro en **Next.js**, Occitanie Verte en **statique** ultra-léger et
+optimisé SEO.
 
-# Editing this README
+### Robotique — Portfolio académique
+Page unique présentant mes projets robotique à l'ESIEA (prototype de camion de pompier sur
+Raspberry Pi, maison intelligente sur Arduino).
+**Stack :** React · TypeScript · Vite.
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+---
 
-## Suggestions for a good README
+## 🛠️ Compétences
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+**Frontend** — React 19, Next.js (App Router), TypeScript, Tailwind CSS, Radix / shadcn/ui
+**Backend** — Supabase, Prisma, Drizzle, PostgreSQL (Neon), API Routes, Stripe, Twilio, Resend
+**IA** — Intégration Claude & Mistral (OCR, chat streaming, reconnaissance vocale)
+**Outillage** — Vite, i18n (next-intl), Playwright, Python
 
-## Name
-Choose a self-explaining name for your project.
+---
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+## 📫 Contact
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
-=======
-# React + TypeScript + Vite
-
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-
-Currently, two official plugins are available:
-
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
->>>>>>> bb1ac9e (Portfolio - robotique)
+📧 **baseflow.fr@gmail.com**

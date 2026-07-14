@@ -1,0 +1,172 @@
+@import "tailwindcss";
+
+/* Les polices (Cormorant Garamond + Jost) sont chargées via <link> dans app/layout.tsx. */
+
+@theme {
+  /* Palette « claire & dorée » — prestige, fond ivoire */
+  --color-ink: #faf6ee;        /* fond de page (ivoire chaud) */
+  --color-ink-soft: #f3ecdf;   /* fond secondaire / champs / section contact */
+  --color-surface: #ffffff;    /* fond des cartes */
+  --color-surface-2: #efe6d5;  /* placeholder image / fonds de badges */
+  --color-line: #e6dcc9;       /* bordures */
+  --color-cream: #2a2017;      /* TEXTE principal (brun foncé) */
+  --color-cream-soft: #6b5d4a; /* texte secondaire */
+  --color-muted: #9a8c76;      /* texte discret */
+  --color-gold: #b1881f;       /* or (icônes, accents, filets) */
+  --color-gold-soft: #8c6a13;  /* or « emphase » (eyebrows, prix) — lisible sur ivoire */
+  --color-gold-deep: #cdba8e;  /* or pâle (filigrane « sans photo ») */
+
+  --font-serif: "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Jost", "Segoe UI", system-ui, sans-serif;
+
+  --radius-xl: 1.1rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: 0.01em;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-serif);
+  font-weight: 500;
+  letter-spacing: 0.005em;
+}
+
+/* Filet doré décoratif */
+.gold-rule {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--color-gold) 50%,
+    transparent
+  );
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  font-size: 0.72rem;
+  color: var(--color-gold-soft);
+}
+
+/* Boutons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.6rem;
+  border-radius: 999px;
+  font-size: 0.92rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease,
+    color 0.18s ease, box-shadow 0.18s ease;
+  text-decoration: none;
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn-gold {
+  background: linear-gradient(180deg, #d9b65a, #c0982f);
+  color: #2f2306;
+  font-weight: 500;
+  box-shadow: 0 10px 26px -12px rgba(177, 136, 31, 0.5);
+}
+.btn-gold:hover {
+  box-shadow: 0 14px 30px -10px rgba(177, 136, 31, 0.6);
+}
+.btn-ghost {
+  background: transparent;
+  border-color: var(--color-line);
+  color: var(--color-cream);
+}
+.btn-ghost:hover {
+  border-color: var(--color-gold);
+  color: var(--color-gold-soft);
+}
+.btn-wa {
+  background: #1f6f4d;
+  color: #eafff4;
+  border-color: #2c8a62;
+}
+.btn-wa:hover {
+  background: #237a56;
+}
+
+/* Cartes */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-xl);
+  box-shadow:
+    0 1px 2px rgba(60, 45, 20, 0.04),
+    0 12px 30px -18px rgba(60, 45, 20, 0.16);
+}
+
+/* Champs de formulaire */
+.field {
+  width: 100%;
+  background: var(--color-ink-soft);
+  border: 1px solid var(--color-line);
+  border-radius: 0.7rem;
+  color: var(--color-cream);
+  padding: 0.7rem 0.9rem;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.field::placeholder {
+  color: var(--color-muted);
+}
+.field:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgba(201, 162, 75, 0.14);
+}
+.label {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-cream-soft);
+  margin-bottom: 0.4rem;
+}
+
+/* Grain / vignette de fond du héros */
+.hero-vignette {
+  background:
+    radial-gradient(120% 80% at 50% -10%, rgba(201, 162, 75, 0.16), transparent 60%),
+    radial-gradient(80% 60% at 80% 110%, rgba(138, 109, 44, 0.12), transparent 60%);
+}
+
+.fade-up {
+  animation: fadeUp 0.7s ease both;
+}
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

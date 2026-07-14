@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>PharmaWorkspace — Où on en est, où on va (v3)</title>
+<style>
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", "Helvetica Neue", sans-serif;
+    color: #1F2937;
+    background: #F8FAFC;
+    margin: 0;
+    padding: 32px 16px;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; }
+
+  h1 { font-size: 26px; font-weight: 600; margin: 0 0 6px; color: #0F172A; }
+  h2 { font-size: 20px; font-weight: 600; margin: 28px 0 12px; color: #0F172A; }
+  h3 { font-size: 16px; font-weight: 600; margin: 18px 0 6px; }
+  p  { margin: 6px 0; }
+
+  .lead { font-size: 16px; color: #475569; margin: 0 0 28px; }
+
+  .card {
+    background: #FFFFFF;
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin-bottom: 18px;
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06), 0 0 0 1px rgba(15, 23, 42, 0.04);
+  }
+  .card-green   { border-left: 5px solid #10B981; }
+  .card-blue    { border-left: 5px solid #3B82F6; }
+  .card-rose    { border-left: 5px solid #F43F5E; background: #FFF5F6; }
+  .card-amber   { border-left: 5px solid #F59E0B; }
+  .card-violet  { border-left: 5px solid #8B5CF6; }
+
+  .badge {
+    display: inline-block;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 4px 10px; border-radius: 999px; margin-bottom: 12px;
+  }
+  .badge-green  { background: #ECFDF5; color: #065F46; }
+  .badge-blue   { background: #EFF6FF; color: #1E40AF; }
+  .badge-rose   { background: #FFE4E6; color: #BE123C; }
+  .badge-amber  { background: #FEF3C7; color: #92400E; }
+  .badge-violet { background: #EDE9FE; color: #5B21B6; }
+
+  ul { margin: 8px 0; padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  li::marker { color: #94A3B8; }
+
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li { padding-left: 28px; position: relative; margin-bottom: 10px; }
+  .checklist li::before {
+    content: "✓"; position: absolute; left: 0; top: 0;
+    width: 20px; height: 20px; background: #10B981; color: #fff;
+    border-radius: 50%; text-align: center; line-height: 20px;
+    font-size: 12px; font-weight: 700;
+  }
+  .checklist-pending li::before { content: "→"; background: #F59E0B; }
+
+  .your-role-list { list-style: none; padding-left: 0; }
+  .your-role-list li {
+    background: #FFFFFF; border: 1px solid #FECDD3;
+    border-radius: 10px; padding: 14px 18px; margin-bottom: 12px;
+  }
+  .your-role-list li strong {
+    color: #BE123C; display: block; margin-bottom: 4px; font-size: 15px;
+  }
+
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px; margin: 14px 0;
+  }
+  .kpi { background: #F8FAFC; padding: 14px; border-radius: 10px; text-align: center; }
+  .kpi-num { font-size: 22px; font-weight: 600; color: #0F172A; }
+  .kpi-label { font-size: 12px; color: #64748B; margin-top: 2px; }
+
+  .quote {
+    font-style: italic; color: #475569;
+    border-left: 3px solid #CBD5E1;
+    padding: 6px 0 6px 14px; margin: 12px 0;
+  }
+
+  .highlight {
+    background: linear-gradient(transparent 55%, #FEF3C7 55%);
+    padding: 0 2px;
+  }
+
+  .new-tag {
+    display: inline-block;
+    background: #DCFCE7;
+    color: #166534;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    letter-spacing: 0.05em;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+  footer {
+    margin-top: 36px; padding-top: 18px;
+    border-top: 1px solid #E2E8F0;
+    text-align: center; color: #94A3B8; font-size: 12px;
+  }
+
+  .update-banner {
+    background: #ECFDF5;
+    border: 1px solid #A7F3D0;
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 22px;
+    font-size: 13px;
+    color: #065F46;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>PharmaWorkspace — où on en est, où on va</h1>
+  <p class="lead">Note de synthèse pour mon partenaire pharmacien. Mai 2026 — v3.</p>
+
+  <div class="update-banner">
+    <strong>Mise à jour v3 :</strong> notre enquête a maintenant <strong>92 réponses</strong> de pharmaciens (au lieu de 60 dans la v2). L'échantillon a presque doublé. Tous les chiffres ci-dessous sont les plus à jour. Plusieurs choses nouvelles à signaler — voir les marqueurs <span class="new-tag">NOUVEAU</span>.
+  </div>
+
+  <!-- INTRO -->
+  <div class="card">
+    <p style="margin-top:0;">Salut,</p>
+    <p>Voici en quelques pages un état des lieux de PharmaWorkspace : ce qui est <strong>déjà fait et en ligne</strong>, ce qui <strong>arrive dans les prochaines semaines</strong> avant qu'on ouvre aux premières officines, et là où tu joues un rôle clé.</p>
+    <p>L'idée : que tu aies en 10 minutes une vision claire pour qu'on puisse en discuter au prochain café et que tu saches précisément où tu peux faire avancer les choses depuis ton réseau.</p>
+  </div>
+
+  <!-- ====================== PARTIE 1 — CE QUI EST FAIT ====================== -->
+  <h2>Ce qui est déjà fait ✅</h2>
+
+  <div class="card card-green">
+    <span class="badge badge-green">Le produit</span>
+    <h3 style="margin-top: 0;">Tous les modules cœur sont en ligne et fonctionnels</h3>
+    <ul class="checklist">
+      <li><strong>Transmissions et tâches d'équipe.</strong> Notes du matin / de l'après-midi, qui fait quoi, ce qui reste à faire — la fin du cahier et des post-it.</li>
+      <li><strong>Ordonnances scannées en 30 secondes.</strong> Une intelligence artificielle française (Mistral, basée à Paris) lit l'ordonnance et en sort les médicaments. Le pharmacien valide en deux clics.</li>
+      <li><strong>Ruptures CIP13.</strong> On scanne le code-barre, on signale, c'est synchronisé avec la base ANSM officielle.</li>
+      <li><strong>Locations de matériel médical.</strong> Tensiomètres, lecteurs glycémie, pompes à perfusion — qui a quoi, retours, factures.</li>
+      <li><strong>Formation interne.</strong> Centralisation des contenus que l'équipe doit avoir lus.</li>
+      <li><strong>Feedback in-app.</strong> Un bouton dans l'application pour qu'un utilisateur nous remonte un bug ou une idée directement.</li>
+    </ul>
+  </div>
+
+  <div class="card card-green">
+    <span class="badge badge-green">Sécurité et conformité</span>
+    <h3 style="margin-top: 0;">Toutes les exigences RGPD sont respectées</h3>
+    <ul class="checklist">
+      <li>Hébergement <strong>à Paris</strong> chez Supabase. Pas un seul fichier ne quitte l'Union européenne.</li>
+      <li>L'intelligence artificielle qui lit les ordonnances est <strong>française</strong> (Mistral, à Paris). Pas d'OpenAI américain.</li>
+      <li>Chiffrement des données en transit et au repos (norme bancaire).</li>
+      <li>Connexion par <strong>lien magique par email</strong> — aucun mot de passe à retenir, ni pour le titulaire ni pour son équipe.</li>
+      <li>Chaque officine est strictement isolée des autres au niveau de la base de données : impossible de voir les données d'une autre pharmacie même en cas de bug.</li>
+      <li>5 rôles désormais reconnus dans l'application : <strong>titulaire, pharmacien adjoint, préparateur, étudiant en pharmacie, rayonniste</strong> — pour coller à la réalité de toutes les officines.<span class="new-tag">NOUVEAU</span></li>
+      <li>Pages publiques de transparence en ligne : sécurité, conditions générales, politique de confidentialité, accord sous-traitance RGPD.</li>
+      <li>Droit à l'export et à la suppression de ses données implémenté dans l'application elle-même.</li>
+    </ul>
+  </div>
+
+  <div class="card card-green">
+    <span class="badge badge-green">Le parcours d'inscription</span>
+    <h3 style="margin-top: 0;">Un titulaire peut s'inscrire seul en moins de 5 minutes</h3>
+    <ul class="checklist">
+      <li>Création de compte par email + lien magique reçu en 30 secondes.</li>
+      <li>Wizard d'installation en 4 étapes : officine, profil, invitation de l'équipe, validation de la carte bancaire.</li>
+      <li><strong>30 jours d'essai gratuit avec carte bancaire validée mais 0 € prélevé</strong> (modèle Linear, Vercel, Loom — standard SaaS B2B aujourd'hui). Premier prélèvement seulement au 31ᵉ jour.</li>
+      <li>Annulation possible à tout moment en 2 clics depuis l'espace de facturation Stripe.</li>
+      <li>Système de missions d'activation in-app pour guider l'équipe pas à pas pendant la première semaine.</li>
+    </ul>
+  </div>
+
+  <div class="card card-green">
+    <span class="badge badge-green">Les données du terrain — 92 répondants <span class="new-tag">+32 RÉPONSES</span></span>
+    <h3 style="margin-top: 0;">L'enquête a presque doublé et nos hypothèses se confirment</h3>
+    <ul class="checklist">
+      <li><strong>90 % des officines (83 sur 92)</strong> vivent au moins une fois par semaine une situation où une info qu'un collègue avait en tête n'a pas été écrite. Pain n°1 massif.</li>
+      <li><strong><span class="highlight">4 pharmaciens sur 10 admettent ne pas savoir citer les 3 tâches en cours</span></strong> dans leur officine au moment où on leur pose la question (41 % exactement sur 92 réponses, statistique très solide). C'est notre meilleur argument de vente — tu vas voir, c'est désarmant en porte-à-porte.</li>
+      <li>Le frein numéro 1 reste <strong>l'adhésion de l'équipe</strong> (40 %). Le coût mensuel est divisé par 2,5 en comparaison (16 %).</li>
+      <li><strong>65 % des répondants sont en groupement</strong> (60 sur 92). Le canal d'acquisition principal reste les partenariats groupement.</li>
+      <li><strong>89 % des pharmaciens interrogés n'ont jamais essayé d'outil dédié</strong> pour l'organisation interne (82 sur 92). Le marché est vierge.</li>
+      <li><strong>15 leads chauds décideurs prêts à introduire un outil dans les 12 mois</strong> identifiés <span class="new-tag">+3 vs v2</span> et <strong>28 pharmaciens accepteraient un échange visio</strong> <span class="new-tag">+8 vs v2</span>. Pipeline qualifié immédiat.</li>
+    </ul>
+  </div>
+
+  <!-- ====================== PARTIE 2 — CE QUI ARRIVE BIENTÔT ====================== -->
+  <h2>Ce qui arrive bientôt 🟡</h2>
+
+  <div class="card card-amber">
+    <span class="badge badge-amber">Côté entreprise</span>
+    <h3 style="margin-top: 0;">Création formelle de la société</h3>
+    <ul class="checklist checklist-pending">
+      <li>Immatriculation de la société (SAS) avec capital, statuts, RCS, SIREN.</li>
+      <li>Ouverture du compte bancaire pro et lien avec Stripe pour encaisser les abonnements.</li>
+      <li>Dépôt de la marque PharmaWorkspace à l'INPI pour éviter qu'un concurrent la dépose.</li>
+      <li>Comptable connecté pour suivre les comptes dès le premier euro encaissé.</li>
+    </ul>
+    <p style="font-size: 13px; color: #6B7280; margin-bottom: 0;">Cette étape conditionne le moment où on peut signer notre premier client payant en règle. C'est notre première priorité dans l'immédiat.</p>
+  </div>
+
+  <div class="card card-blue">
+    <span class="badge badge-blue">Côté produit</span>
+    <h3 style="margin-top: 0;">Quelques modules supplémentaires à livrer avant les pilotes</h3>
+    <ul class="checklist checklist-pending">
+      <li><strong>Photos sur les locations de matériel.</strong> Le titulaire pourra prendre une photo du matériel à la sortie et au retour pour gérer les litiges en cas de casse.</li>
+      <li><strong>Salon textuel d'équipe</strong>, genre WhatsApp mais interne et sécurisé. Une des fonctionnalités les plus demandées par les pharmaciens sondés.</li>
+      <li><strong>Planning de présence et demandes de congés.</strong> Quatrième module le plus demandé. Permet de remplacer le tableau papier du planning.</li>
+      <li><strong>Limite d'utilisateurs selon le tarif souscrit</strong> (Solo 3 max, Équipe jusqu'à 8, Grande équipe au-delà). Pour que le modèle économique soit propre.</li>
+      <li>(Les nouveaux rôles étudiant + rayonniste sont déjà livrés <span class="new-tag">✓ FAIT</span>)</li>
+    </ul>
+    <p style="font-size: 13px; color: #6B7280; margin-bottom: 0;">Notre développeur (Dim) avance bien. L'objectif est d'avoir tout en ligne avant qu'on commence à présenter aux pharmaciens, pour ne pas vendre un produit incomplet.</p>
+  </div>
+
+  <div class="card card-violet">
+    <span class="badge badge-violet">Côté commercial</span>
+    <h3 style="margin-top: 0;">Les supports et la machine de démarchage</h3>
+    <ul class="checklist checklist-pending">
+      <li><strong>Flyer A4 recto-verso imprimé</strong> à laisser dans les officines visitées.</li>
+      <li><strong>Présentation tablette</strong> de 5-7 slides pour pitcher sur place quand le titulaire reçoit.</li>
+      <li><strong>Vidéo de démo</strong> 90 secondes pour la landing et les emails de relance.</li>
+      <li><strong>Cartes de visite</strong> imprimées avec un QR code qui amène directement vers la page d'inscription.</li>
+      <li><strong>Recrutement d'un commercial junior à Paris</strong> qui ira faire le porte-à-porte dans les arrondissements ciblés.</li>
+      <li><strong>Moi sur la Côte d'Azur</strong> (Nice, Cap-Ferrat, Monaco, Antibes, Cannes, Mougins) en parallèle.</li>
+      <li><strong>Séquence d'emails automatisée</strong> pour suivre chaque prospect depuis la première visite jusqu'au 30ᵉ jour après inscription.</li>
+    </ul>
+    <p style="font-size: 13px; color: #6B7280; margin-bottom: 0;">L'idée : présenter PharmaWorkspace physiquement en officine plutôt que d'attendre des inscriptions en ligne. C'est moins scalable mais c'est le seul moyen crédible quand tu vends à des titulaires 45-55 ans qui ne testent jamais un outil B2B en ligne sans qu'on leur en parle.</p>
+  </div>
+
+  <!-- ====================== PARTIE 3 — TON RÔLE ====================== -->
+  <h2>Là où tu fais la différence 🌹</h2>
+
+  <div class="card card-rose">
+    <p style="margin-top: 0;">Ton apport est <strong>le multiplicateur principal</strong> de tout ce plan. Tu es titulaire en exercice, tu as un carnet d'adresses, tu connais des dirigeants de groupements. Sans toi, on fait du démarchage à froid : long, lent, et avec un taux de réponse faible. Avec toi, on chauffe les leads en amont, et on convertit 3 à 5 fois mieux.</p>
+    <p>Voici les <strong>7 contributions concrètes</strong> que je te demande, par ordre d'importance pour les prochaines semaines :</p>
+
+    <ul class="your-role-list">
+      <li>
+        <strong>1. Être notre pilote zéro dans ta propre officine</strong>
+        Tu installes PharmaWorkspace chez toi, ton équipe l'utilise au quotidien. Premier vrai retour produit. C'est aussi ce qui donne du poids à ton témoignage ultérieur (« j'ai testé chez moi avant »).
+      </li>
+      <li>
+        <strong>2. Me partager ta liste de pharmaciens warm</strong>
+        Une vingtaine ou plus, ce serait idéal. Des titulaires que tu connais bien et à qui tu peux dire « Mehdi va t'appeler de ma part, écoute ce qu'il a à te présenter ». Coordonnées + niveau de relation pour chacun. Je m'occupe de la suite.
+      </li>
+      <li>
+        <strong>3. Cartographier les groupements que tu connais <span class="new-tag">MISE À JOUR</span></strong>
+        Top 6 confirmés par les 92 répondants : <strong>Giphar, Aprium, Giropharm, Pharmavie, Totum, Pharmuni</strong>. <strong>Giropharm fait son entrée au top 3</strong> — c'est nouveau, il faut l'inclure. Lesquels tu connais ? Tu as un contact direct chez quel dirigeant ? Niveau de relation ? Cette cartographie devient un asset stratégique : c'est par là qu'on signera notre premier partenariat groupement.
+      </li>
+      <li>
+        <strong>4. Faire les warm intros aux dirigeants groupements</strong>
+        Une fois la cartographie posée, tu envoies un email d'intro à un ou deux dirigeants pour leur dire « je suis partenaire d'une boîte qui fait un outil interne d'organisation officine, je trouve ça pertinent pour vos adhérents, vous voulez en discuter ? ». Quelques lignes, ça change tout.
+      </li>
+      <li>
+        <strong>5. Co-présenter à 2-3 rendez-vous</strong>
+        Pour les titulaires les plus sceptiques (ceux qui se méfient des outils tech), ta présence physique en RDV au début apporte une caution métier que je n'aurai jamais seul. Inutile pour tous, mais utile pour les difficiles.
+      </li>
+      <li>
+        <strong>6. Valider notre vocabulaire métier sur les supports</strong>
+        Avant qu'on imprime le flyer et la plaquette tablette, je te les passe pour que tu corriges le vocabulaire : ce qui sonne juste, ce qui sonne faux, ce qui manque, ce qui est en trop. Tu connais le ton des comptoirs, je veux pas qu'on parle comme une startup.
+      </li>
+      <li>
+        <strong>7. Fournir le témoignage signature</strong>
+        Quand tu auras 2-3 mois d'usage chez toi, je te demanderai une citation + ta photo + ton accord pour que ça figure sur la page « cas clients » du site. C'est l'ancre de crédibilité pour tous les autres pilotes et pour les groupements.
+      </li>
+    </ul>
+  </div>
+
+  <!-- ====================== PARTIE 4 — OBJECTIFS COMMUNS ====================== -->
+  <h2>Ce qu'on vise ensemble 🎯</h2>
+
+  <div class="card card-blue">
+    <div class="kpi-grid">
+      <div class="kpi">
+        <div class="kpi-num">1</div>
+        <div class="kpi-label">Pilote zéro (toi)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">10</div>
+        <div class="kpi-label">Pilotes actifs (toi + 9 autres)</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">7+</div>
+        <div class="kpi-label">Pilotes payants après 30 jours</div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-num">1</div>
+        <div class="kpi-label">Partenariat groupement signé</div>
+      </div>
+    </div>
+    <p style="font-size: 14px; color: #475569; margin-bottom: 0;">Si on atteint ces 4 objectifs, on déclenche l'ouverture publique et potentiellement le recrutement d'un second commercial pour une autre région française. Sinon on ajuste et on relance un cycle plus court avant ouverture.</p>
+  </div>
+
+  <!-- ====================== PARTIE 5 — RYTHME ====================== -->
+  <h2>Comment on se synchronise 📞</h2>
+
+  <div class="card">
+    <ul>
+      <li><strong>Point hebdo court</strong> (15-20 minutes) par téléphone ou visio. Idéalement le lundi matin avant l'ouverture.</li>
+      <li><strong>Updates écrites</strong> par WhatsApp ou email entre deux points pour les petites infos (un pharmacien qui a répondu, une opportunité, une question urgente).</li>
+      <li><strong>Tu peux me ping à tout moment</strong> si tu vois quelque chose : une opportunité, un nom à me donner, un retour terrain inattendu. Pas besoin d'attendre le créneau hebdo.</li>
+      <li><strong>Je te ferai un compte-rendu mensuel</strong> avec les chiffres clés (visites faites, signatures obtenues, retours pilotes, NPS, ce qui marche, ce qui ne marche pas). Tu seras toujours au courant sans avoir à demander.</li>
+    </ul>
+  </div>
+
+  <!-- ====================== CITATION DE FIN ====================== -->
+  <div class="card" style="background: #FFFBEB; border-left: 5px solid #F59E0B;">
+    <div class="quote">
+      « Notre vrai concurrent ce n'est pas Pharmagest ou un autre outil. C'est le cahier de transmission, les post-it sur la caisse et le groupe WhatsApp de l'équipe. Et avec ton réseau, on a une chance crédible de proposer mieux. »
+    </div>
+    <p style="margin-bottom: 0;">À très vite,</p>
+    <p style="margin-top: 4px; margin-bottom: 0;"><strong>Mehdi</strong></p>
+  </div>
+
+  <footer>
+    Document partagé entre partenaires PharmaWorkspace — Version 3, mai 2026 — 92 réponses sondage.
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+{
+  "nav": {
+    "catalogue": "Catalogue",
+    "maison": "Notre Maison",
+    "order": "Commander"
+  },
+  "hero": {
+    "eyebrow": "Maison de boulangerie · {city}",
+    "title": "La boulangerie de prestige des belles adresses d'Alger.",
+    "subtitle": "Viennoiseries, pains de tradition et pâtisseries d'exception, livrés aux cafés, hôtels et tables qui font le prestige d'Alger.",
+    "ctaOrder": "Commander sur WhatsApp"
+  },
+  "catalogue": {
+    "eyebrow": "Le catalogue",
+    "title": "Notre carte",
+    "subtitle": "Des produits préparés chaque jour, dans la plus pure tradition.",
+    "empty": "Le catalogue est en cours de préparation.",
+    "uncategorized": "Nos créations",
+    "view": "Voir le produit"
+  },
+  "product": {
+    "back": "Retour au catalogue",
+    "order": "Commander sur WhatsApp",
+    "call": "Nous appeler",
+    "notFound": "Ce produit n'existe pas ou n'est plus disponible.",
+    "backShort": "Catalogue"
+  },
+  "maison": {
+    "eyebrow": "Notre Maison",
+    "title": "L'excellence boulangère, au cœur d'Alger",
+    "lead": "Une maison née d'une obsession : porter le savoir-faire boulanger français au plus haut niveau d'exigence, pour les adresses qui font le goût d'Alger.",
+    "p1": "Chaque matin, nos artisans façonnent à la main des viennoiseries au beurre, des pains de tradition à fermentation lente et des pâtisseries d'exception. Aucune chaîne, aucun raccourci — seulement le geste juste et des ingrédients choisis.",
+    "p2": "Nous avons conçu cette maison pour une clientèle qui ne transige pas sur la qualité : les grands cafés modernes, les hôtels et les restaurants de prestige d'Alger, ainsi que les particuliers en quête du meilleur.",
+    "p3": "Notre catalogue est volontairement resserré, pensé comme une carte : chaque produit y a sa place parce qu'il est, à nos yeux, irréprochable.",
+    "value1Title": "Fait main",
+    "value1Text": "Façonnage artisanal, chaque jour, sans industrialisation.",
+    "value2Title": "Ingrédients d'exception",
+    "value2Text": "Beurre AOP, levains naturels, matières premières sélectionnées.",
+    "value3Title": "Au service du prestige",
+    "value3Text": "Une exigence pensée pour les plus belles tables d'Alger.",
+    "cta": "Composer ma commande"
+  },
+  "contact": {
+    "eyebrow": "Passer commande",
+    "title": "Parlons de vos besoins",
+    "subtitle": "Laissez-nous vos coordonnées : nous vous rappelons pour composer votre commande sur mesure. Vous pouvez aussi nous joindre directement.",
+    "callLabel": "Nous appeler",
+    "whatsappLabel": "WhatsApp",
+    "formTitle": "Être recontacté",
+    "firstName": "Prénom",
+    "lastName": "Nom",
+    "phone": "Téléphone",
+    "message": "Votre besoin (optionnel)",
+    "messagePlaceholder": "Ex. : livraison quotidienne de viennoiseries pour mon café…",
+    "submit": "Être recontacté",
+    "sending": "Envoi…",
+    "successTitle": "Demande bien reçue",
+    "successText": "Notre équipe vous rappelle très prochainement pour finaliser votre commande.",
+    "errName": "Merci d'indiquer votre prénom et votre nom.",
+    "errPhone": "Merci d'indiquer un numéro de téléphone valide.",
+    "privacy": "Nous utilisons ces informations uniquement pour vous rappeler."
+  },
+  "footer": {
+    "tagline": "Boulangerie de prestige à {city}.",
+    "explore": "Explorer",
+    "contactTitle": "Nous contacter",
+    "rights": "Tous droits réservés.",
+    "admin": "Espace gérant"
+  },
+  "order": {
+    "whatsappGlobal": "Bonjour {shop}, je souhaite passer commande.",
+    "whatsappProduct": "Bonjour {shop}, je souhaite commander : {product} ({price})."
+  },
+  "language": {
+    "label": "Langue",
+    "fr": "Français",
+    "en": "English"
+  }
+}

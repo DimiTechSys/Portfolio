@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PharmaWorkspace — Toute la coordination de votre officine, dans un seul espace.</title>
+  <meta name="description" content="L'espace partagé des équipes officinales françaises. Tâches, ordonnances, ruptures, locations — tout en un seul endroit. Hébergé en France, conforme RGPD." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --teal-50: #f0fdfa;
+      --teal-100: #ccfbf1;
+      --teal-500: #14b8a6;
+      --teal-600: #0d9488;
+      --teal-700: #0f766e;
+      --cyan-500: #06b6d4;
+    }
+    * { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-feature-settings: 'cv11', 'ss01', 'ss03';
+    }
+    h1, h2, h3, h4 { letter-spacing: -0.025em; }
+    h1 { letter-spacing: -0.04em; }
+    .text-balance { text-wrap: balance; }
+    .text-pretty { text-wrap: pretty; }
+    .grain {
+      background-image: radial-gradient(circle at 1px 1px, rgba(15,23,42,0.05) 1px, transparent 0);
+      background-size: 24px 24px;
+    }
+    .gradient-hero {
+      background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(20,184,166,0.10), transparent);
+    }
+    .section-divider {
+      background-image: linear-gradient(to right, transparent, rgba(15,23,42,0.08), transparent);
+      height: 1px;
+    }
+    .card-shadow {
+      box-shadow: 0 1px 2px 0 rgba(15,23,42,0.04), 0 4px 12px -2px rgba(15,23,42,0.06);
+    }
+    .card-shadow-lg {
+      box-shadow: 0 4px 8px -2px rgba(15,23,42,0.06), 0 24px 48px -12px rgba(15,23,42,0.18);
+    }
+    .ring-teal {
+      box-shadow: 0 0 0 1px rgba(13,148,136,0.20), 0 8px 32px -8px rgba(13,148,136,0.20);
+    }
+    .scrollbar-hide::-webkit-scrollbar { display: none; }
+    .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="bg-white text-slate-900">
+
+<!-- ========================================================== -->
+<!-- HEADER STICKY                                                -->
+<!-- ========================================================== -->
+<header class="sticky top-0 z-50 border-b border-slate-200/60 bg-white/85 backdrop-blur-md">
+  <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <a href="/" class="flex items-center gap-2">
+      <span class="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">P</span>
+      <span class="text-base font-semibold tracking-tight text-slate-900">PharmaWorkspace</span>
+    </a>
+    <nav class="hidden items-center gap-8 lg:flex">
+      <a href="#produit" class="text-sm font-medium text-slate-700 transition hover:text-slate-900">Produit</a>
+      <a href="#tarifs" class="text-sm font-medium text-slate-700 transition hover:text-slate-900">Tarifs</a>
+      <a href="/securite" class="text-sm font-medium text-slate-700 transition hover:text-slate-900">Sécurité</a>
+      <a href="#faq" class="text-sm font-medium text-slate-700 transition hover:text-slate-900">FAQ</a>
+    </nav>
+    <div class="flex items-center gap-3">
+      <a href="/login" class="hidden text-sm font-medium text-slate-700 transition hover:text-slate-900 sm:inline-block">Connexion</a>
+      <a href="/signup?source=header" class="inline-flex items-center gap-1.5 rounded-full bg-slate-900 px-4 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-slate-800">
+        Démarrer
+        <svg class="h-3.5 w-3.5" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<!-- ========================================================== -->
+<!-- HERO                                                         -->
+<!-- ========================================================== -->
+<section class="relative gradient-hero">
+  <div class="mx-auto max-w-7xl px-4 pt-16 pb-20 sm:px-6 sm:pt-24 sm:pb-28 lg:px-8 lg:pt-32 lg:pb-36">
+
+    <div class="mb-8 flex justify-center">
+      <span class="inline-flex items-center gap-2 rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-xs font-medium text-teal-800">
+        <span class="relative flex h-1.5 w-1.5">
+          <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-400 opacity-75"></span>
+          <span class="relative inline-flex h-1.5 w-1.5 rounded-full bg-teal-500"></span>
+        </span>
+        Bêta privée — 20 premières officines à -40 % à vie
+      </span>
+    </div>
+
+    <h1 class="mx-auto max-w-5xl text-center text-4xl font-bold text-balance text-slate-900 sm:text-6xl lg:text-7xl">
+      Toute la coordination de votre officine,<br class="hidden sm:block"/>
+      <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">dans un seul espace.</span>
+    </h1>
+
+    <p class="mx-auto mt-8 max-w-2xl text-center text-lg text-pretty text-slate-600 sm:text-xl">
+      L'espace partagé des équipes officinales françaises. Tâches, ordonnances, ruptures, locations,
+      transmissions — tout converge enfin au même endroit, accessible sur mobile et desktop.
+    </p>
+
+    <div class="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+      <a href="/signup?source=hero" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-slate-900 px-7 py-4 text-base font-medium text-white shadow-lg transition hover:bg-slate-800 sm:w-auto">
+        Démarrer 30 jours gratuits
+        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="/demo" class="inline-flex w-full items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-7 py-4 text-base font-medium text-slate-900 transition hover:bg-slate-50 sm:w-auto">
+        Réserver 15 min avec un fondateur
+      </a>
+    </div>
+
+    <p class="mt-6 flex items-center justify-center gap-2 text-center text-sm text-slate-500">
+      <svg class="h-4 w-4 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 1L2 3v4c0 4 3 7 6 8 3-1 6-4 6-8V3l-6-2z" stroke-linejoin="round"/><path d="M5.5 8l2 2 3-3.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Carte bancaire validée à l'inscription · 0&nbsp;€ prélevés pendant 30 jours · Annulable en 2 clics
+    </p>
+
+    <!-- Visual mockup -->
+    <div class="relative mx-auto mt-20 max-w-5xl">
+      <div class="relative rounded-3xl border border-slate-200 bg-gradient-to-br from-slate-50 to-white p-3 card-shadow-lg sm:p-4">
+        <div class="aspect-[16/10] overflow-hidden rounded-2xl bg-white ring-1 ring-slate-200">
+          <!-- Faux app mockup -->
+          <div class="flex h-full">
+            <!-- Sidebar -->
+            <div class="hidden w-48 flex-col border-r border-slate-100 bg-slate-50/50 p-4 lg:flex">
+              <div class="flex items-center gap-2">
+                <div class="h-6 w-6 rounded-md bg-gradient-to-br from-teal-500 to-cyan-500"></div>
+                <span class="text-xs font-semibold text-slate-700">Pharmacie Centrale</span>
+              </div>
+              <div class="mt-6 space-y-1">
+                <div class="flex items-center gap-2 rounded-lg bg-white px-2.5 py-2 ring-1 ring-slate-200">
+                  <div class="h-3.5 w-3.5 rounded bg-teal-500/20"></div>
+                  <span class="text-xs font-medium text-slate-900">Tableau de bord</span>
+                </div>
+                <div class="flex items-center gap-2 rounded-lg px-2.5 py-2">
+                  <div class="h-3.5 w-3.5 rounded bg-slate-200"></div>
+                  <span class="text-xs text-slate-600">Tâches</span>
+                  <span class="ml-auto rounded-full bg-teal-100 px-1.5 text-[10px] font-medium text-teal-700">4</span>
+                </div>
+                <div class="flex items-center gap-2 rounded-lg px-2.5 py-2">
+                  <div class="h-3.5 w-3.5 rounded bg-slate-200"></div>
+                  <span class="text-xs text-slate-600">Ordonnances</span>
+                </div>
+                <div class="flex items-center gap-2 rounded-lg px-2.5 py-2">
+                  <div class="h-3.5 w-3.5 rounded bg-slate-200"></div>
+                  <span class="text-xs text-slate-600">Ruptures</span>
+                  <span class="ml-auto rounded-full bg-amber-100 px-1.5 text-[10px] font-medium text-amber-700">2</span>
+                </div>
+                <div class="flex items-center gap-2 rounded-lg px-2.5 py-2">
+                  <div class="h-3.5 w-3.5 rounded bg-slate-200"></div>
+                  <span class="text-xs text-slate-600">Locations</span>
+                </div>
+                <div class="flex items-center gap-2 rounded-lg px-2.5 py-2">
+                  <div class="h-3.5 w-3.5 rounded bg-slate-200"></div>
+                  <span class="text-xs text-slate-600">Salon d'équipe</span>
+                </div>
+              </div>
+            </div>
+            <!-- Main -->
+            <div class="flex-1 p-4 sm:p-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-semibold text-slate-900 sm:text-base">Bonjour, Sophie</h3>
+                  <p class="text-xs text-slate-500">Voici ce qui vous attend ce matin</p>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="h-7 w-7 rounded-full bg-gradient-to-br from-teal-400 to-cyan-400"></div>
+                  <div class="h-7 w-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-400 -ml-2 ring-2 ring-white"></div>
+                  <div class="h-7 w-7 rounded-full bg-gradient-to-br from-violet-400 to-purple-400 -ml-2 ring-2 ring-white"></div>
+                </div>
+              </div>
+              <div class="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
+                <div class="rounded-xl border border-slate-200 bg-white p-3">
+                  <p class="text-[10px] font-medium uppercase tracking-wider text-slate-400">Tâches</p>
+                  <p class="mt-1 text-xl font-bold text-slate-900">12</p>
+                  <p class="text-[10px] text-teal-600">+3 aujourd'hui</p>
+                </div>
+                <div class="rounded-xl border border-slate-200 bg-white p-3">
+                  <p class="text-[10px] font-medium uppercase tracking-wider text-slate-400">Ordo en attente</p>
+                  <p class="mt-1 text-xl font-bold text-slate-900">5</p>
+                  <p class="text-[10px] text-slate-500">2 OCR à valider</p>
+                </div>
+                <div class="rounded-xl border border-amber-200 bg-amber-50/50 p-3">
+                  <p class="text-[10px] font-medium uppercase tracking-wider text-amber-600">Ruptures</p>
+                  <p class="mt-1 text-xl font-bold text-amber-900">2</p>
+                  <p class="text-[10px] text-amber-700">Alertes ANSM</p>
+                </div>
+              </div>
+              <div class="mt-4 space-y-2">
+                <div class="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3">
+                  <div class="h-4 w-4 rounded border-2 border-slate-300"></div>
+                  <div class="flex-1">
+                    <p class="text-xs font-medium text-slate-900">Vérifier la commande Aprium reçue ce matin</p>
+                    <p class="text-[10px] text-slate-500">Transmis par Léa — il y a 8 min</p>
+                  </div>
+                  <span class="rounded-full bg-teal-50 px-2 py-0.5 text-[10px] font-medium text-teal-700">Urgent</span>
+                </div>
+                <div class="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3">
+                  <div class="h-4 w-4 rounded border-2 border-slate-300"></div>
+                  <div class="flex-1">
+                    <p class="text-xs font-medium text-slate-900">Mme Bertrand — préparation pilulier semaine 24</p>
+                    <p class="text-[10px] text-slate-500">Pour vendredi</p>
+                  </div>
+                </div>
+                <div class="flex items-center gap-3 rounded-lg border border-slate-200 bg-white p-3 opacity-60">
+                  <div class="grid h-4 w-4 place-items-center rounded bg-teal-500">
+                    <svg class="h-3 w-3 text-white" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </div>
+                  <div class="flex-1">
+                    <p class="text-xs font-medium text-slate-500 line-through">Appeler le labo Biogaran sur la rupture Doliprane 1000</p>
+                    <p class="text-[10px] text-slate-400">Fait par Karim</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- Soft blur backdrop -->
+      <div aria-hidden="true" class="absolute -inset-x-20 -bottom-20 -z-10 h-72 bg-gradient-to-t from-teal-100/40 via-cyan-100/30 to-transparent blur-3xl"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- TRUST BAR — CHIFFRES                                        -->
+<!-- ========================================================== -->
+<section class="border-y border-slate-200 bg-slate-50/50">
+  <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+    <p class="text-center text-sm font-medium uppercase tracking-wider text-slate-500">Conçu avec 92 pharmaciens en exercice</p>
+    <div class="mt-12 grid grid-cols-2 gap-y-10 gap-x-6 lg:grid-cols-4">
+      <div class="text-center">
+        <p class="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl">90<span class="text-3xl text-slate-400">%</span></p>
+        <p class="mt-2 text-sm font-medium text-slate-700">vivent le pain hebdomadaire de l'info pas écrite</p>
+      </div>
+      <div class="text-center">
+        <p class="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl">4<span class="text-3xl text-slate-400">/10</span></p>
+        <p class="mt-2 text-sm font-medium text-slate-700">ne peuvent pas citer les 3 tâches en cours</p>
+      </div>
+      <div class="text-center">
+        <p class="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl">100<span class="text-3xl text-slate-400">%</span></p>
+        <p class="mt-2 text-sm font-medium text-slate-700">données hébergées en France, conforme RGPD</p>
+      </div>
+      <div class="text-center">
+        <p class="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl">30<span class="text-3xl text-slate-400">j</span></p>
+        <p class="mt-2 text-sm font-medium text-slate-700">d'essai gratuits, annulable en 2 clics</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- SECTION 1 — TRANSMISSION ÉQUIPE                              -->
+<!-- ========================================================== -->
+<section id="produit" class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+      <div class="order-2 lg:order-1">
+        <span class="text-sm font-semibold uppercase tracking-wider text-teal-700">Transmission équipe</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-balance text-slate-900 sm:text-5xl">
+          Plus jamais de note volante.
+        </h2>
+        <p class="mt-6 text-lg text-pretty text-slate-600">
+          Ce qu'un seul collègue a en tête, écrivez-le une fois et toute l'équipe y a accès.
+          Le cahier de transmission, les post-it sur l'écran et le groupe WhatsApp deviennent
+          un seul flux clair, horodaté, attribué, recherchable.
+        </p>
+        <ul class="mt-8 space-y-4">
+          <li class="flex gap-3">
+            <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-teal-100">
+              <svg class="h-3 w-3 text-teal-700" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="text-base text-slate-700">Tâches attribuées par préparateur, par jour, par urgence</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-teal-100">
+              <svg class="h-3 w-3 text-teal-700" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="text-base text-slate-700">Notes de transmission entre matin et après-midi, visibles instantanément</span>
+          </li>
+          <li class="flex gap-3">
+            <span class="mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-teal-100">
+              <svg class="h-3 w-3 text-teal-700" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 6l3 3 5-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="text-base text-slate-700">Salon textuel d'équipe sécurisé, sans mélange perso / pro</span>
+          </li>
+        </ul>
+      </div>
+      <div class="order-1 lg:order-2">
+        <div class="relative rounded-2xl border border-slate-200 bg-gradient-to-br from-teal-50 to-cyan-50 p-6 card-shadow">
+          <div class="space-y-3">
+            <div class="rounded-xl bg-white p-4 ring-1 ring-slate-200">
+              <div class="flex items-start gap-3">
+                <div class="h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-teal-400 to-cyan-400"></div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-semibold text-slate-900">Léa</span>
+                    <span class="text-xs text-slate-500">7:42</span>
+                  </div>
+                  <p class="mt-1 text-sm text-slate-700">Commande Aprium reçue ce matin, à vérifier en priorité — il manque peut-être les ampoules vit. D.</p>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-xl bg-white p-4 ring-1 ring-slate-200">
+              <div class="flex items-start gap-3">
+                <div class="h-8 w-8 shrink-0 rounded-full bg-gradient-to-br from-amber-400 to-orange-400"></div>
+                <div class="flex-1">
+                  <div class="flex items-center gap-2">
+                    <span class="text-sm font-semibold text-slate-900">Karim</span>
+                    <span class="text-xs text-slate-500">8:15</span>
+                  </div>
+                  <p class="mt-1 text-sm text-slate-700">Vérifié, ampoules vit. D bien arrivées (24 boîtes). Je range et clôture.</p>
+                </div>
+              </div>
+            </div>
+            <div class="rounded-xl bg-teal-600 p-4 text-white">
+              <div class="flex items-start gap-3">
+                <div class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/20">
+                  <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </div>
+                <div class="flex-1">
+                  <span class="text-sm font-semibold">Tâche close</span>
+                  <p class="mt-1 text-sm opacity-90">Commande Aprium — vérifiée par Karim</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- SECTION 2 — ORDONNANCES OCR                                  -->
+<!-- ========================================================== -->
+<section class="bg-slate-50 py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+      <div>
+        <div class="relative rounded-2xl border border-slate-200 bg-white p-6 card-shadow">
+          <div class="rounded-xl bg-slate-100 p-4">
+            <div class="flex items-center gap-3">
+              <div class="grid h-10 w-10 place-items-center rounded-lg bg-white ring-1 ring-slate-200">
+                <svg class="h-5 w-5 text-slate-700" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="3" width="12" height="14" rx="2"/><path d="M7 7h6M7 10h6M7 13h4"/></svg>
+              </div>
+              <div class="flex-1">
+                <p class="text-sm font-medium text-slate-900">ordonnance_bertrand_06-2026.jpg</p>
+                <p class="text-xs text-slate-500">Analysée en 28 secondes par Mistral</p>
+              </div>
+              <span class="rounded-full bg-teal-100 px-2 py-0.5 text-xs font-medium text-teal-700">OCR OK</span>
+            </div>
+          </div>
+          <div class="mt-4 space-y-2">
+            <div class="flex items-center justify-between rounded-lg border border-slate-200 p-3">
+              <div>
+                <p class="text-sm font-medium text-slate-900">DOLIPRANE 1000 mg</p>
+                <p class="text-xs text-slate-500">Boîte de 8 cp · CIP13&nbsp;3400935956439</p>
+              </div>
+              <span class="text-sm font-semibold text-slate-900">1 b.</span>
+            </div>
+            <div class="flex items-center justify-between rounded-lg border border-slate-200 p-3">
+              <div>
+                <p class="text-sm font-medium text-slate-900">KARDEGIC 75 mg</p>
+                <p class="text-xs text-slate-500">Boîte de 30 sachets · CIP13&nbsp;3400933458058</p>
+              </div>
+              <span class="text-sm font-semibold text-slate-900">3 b.</span>
+            </div>
+            <div class="flex items-center justify-between rounded-lg border border-amber-200 bg-amber-50/50 p-3">
+              <div>
+                <p class="text-sm font-medium text-slate-900">SPASFON 80 mg</p>
+                <p class="text-xs text-amber-700">⚠ En rupture, alerte ANSM en cours</p>
+              </div>
+              <span class="text-sm font-semibold text-slate-900">2 b.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <span class="text-sm font-semibold uppercase tracking-wider text-teal-700">Ordonnances</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-balance text-slate-900 sm:text-5xl">
+          Une ordonnance scannée, en 30 secondes.
+        </h2>
+        <p class="mt-6 text-lg text-pretty text-slate-600">
+          Notre intelligence artificielle française <strong>Mistral</strong>, hébergée à Paris,
+          extrait les médicaments, les dosages et les CIP13. Vous corrigez si besoin, vous validez,
+          et tout est tracé pour votre équipe.
+        </p>
+        <dl class="mt-8 grid grid-cols-2 gap-6">
+          <div>
+            <dt class="text-3xl font-bold text-slate-900">~30s</dt>
+            <dd class="mt-1 text-sm text-slate-600">par ordonnance, validation incluse</dd>
+          </div>
+          <div>
+            <dt class="text-3xl font-bold text-slate-900">France</dt>
+            <dd class="mt-1 text-sm text-slate-600">IA Mistral Paris, aucun transfert UE</dd>
+          </div>
+          <div>
+            <dt class="text-3xl font-bold text-slate-900">CIP13</dt>
+            <dd class="mt-1 text-sm text-slate-600">code-barres reconnu nativement</dd>
+          </div>
+          <div>
+            <dt class="text-3xl font-bold text-slate-900">ANSM</dt>
+            <dd class="mt-1 text-sm text-slate-600">alertes rupture intégrées en temps réel</dd>
+          </div>
+        </dl>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- SECTION 3 — RUPTURES                                         -->
+<!-- ========================================================== -->
+<section class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid items-center gap-16 lg:grid-cols-2 lg:gap-20">
+      <div class="order-2 lg:order-1">
+        <span class="text-sm font-semibold uppercase tracking-wider text-teal-700">Ruptures</span>
+        <h2 class="mt-4 text-3xl font-bold tracking-tight text-balance text-slate-900 sm:text-5xl">
+          Une rupture signalée en un scan.
+        </h2>
+        <p class="mt-6 text-lg text-pretty text-slate-600">
+          Scannez le code-barre CIP13, c'est tout. Le médicament est ajouté au registre de
+          rupture de l'équipe avec l'historique ANSM en face. Quand le produit revient, vous
+          êtes notifié automatiquement.
+        </p>
+        <div class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-5">
+          <p class="text-sm text-slate-700">
+            <strong class="text-slate-900">« Avant, on notait sur un cahier qu'on perdait. Maintenant,
+            je tape le code, et toute l'équipe sait que le Spasfon n'est pas dispo. »</strong>
+          </p>
+          <p class="mt-3 text-xs text-slate-500">— Sophie B., titulaire pilote, Nice</p>
+        </div>
+      </div>
+      <div class="order-1 lg:order-2">
+        <div class="relative mx-auto max-w-sm">
+          <div class="rounded-[2.5rem] border-8 border-slate-900 bg-slate-900 p-1 card-shadow-lg">
+            <div class="rounded-[2rem] bg-white p-6">
+              <div class="flex items-center justify-between text-[10px] font-semibold text-slate-900">
+                <span>9:41</span>
+                <div class="flex items-center gap-1">
+                  <div class="h-2 w-2 rounded-full bg-slate-900"></div>
+                  <div class="h-2 w-2 rounded-full bg-slate-900"></div>
+                  <div class="h-2 w-2 rounded-full bg-slate-900"></div>
+                </div>
+              </div>
+              <h3 class="mt-6 text-xl font-bold text-slate-900">Signaler une rupture</h3>
+              <div class="mt-6 aspect-square rounded-2xl bg-gradient-to-br from-teal-50 to-cyan-50 ring-1 ring-teal-100">
+                <div class="flex h-full items-center justify-center">
+                  <div class="space-y-2 text-center">
+                    <div class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 shadow-lg">
+                      <svg class="h-8 w-8 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="12" rx="1"/><path d="M7 6v12M11 6v12M15 6v12M19 6v12" stroke-width="1.5"/></svg>
+                    </div>
+                    <p class="text-xs font-medium text-slate-700">Visez le code-barres</p>
+                  </div>
+                </div>
+              </div>
+              <div class="mt-4 rounded-xl bg-slate-50 p-4">
+                <p class="text-xs text-slate-500">Détecté</p>
+                <p class="mt-1 text-sm font-semibold text-slate-900">SPASFON 80 mg</p>
+                <p class="text-xs text-slate-600">CIP13 · 3400933458058</p>
+                <button class="mt-3 w-full rounded-lg bg-slate-900 py-2.5 text-xs font-semibold text-white">Signaler la rupture</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- SECTION 4 — SÉCURITÉ                                         -->
+<!-- ========================================================== -->
+<section class="relative overflow-hidden bg-slate-900 py-24 text-white sm:py-32">
+  <div aria-hidden="true" class="absolute inset-0 grain opacity-50"></div>
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="text-sm font-semibold uppercase tracking-wider text-teal-300">Sécurité &amp; conformité</span>
+      <h2 class="mt-4 text-3xl font-bold tracking-tight text-balance sm:text-5xl">
+        Construit pour les exigences du métier.
+      </h2>
+      <p class="mt-6 text-lg text-pretty text-slate-300">
+        Vous traitez des données patient. Nous avons conçu PharmaWorkspace pour que vous
+        n'ayez jamais à vous inquiéter de leur sécurité ni de leur conformité.
+      </p>
+    </div>
+    <div class="mx-auto mt-16 grid max-w-5xl gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-teal-500/20">
+          <svg class="h-5 w-5 text-teal-300" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2l-7 3v5c0 4.5 3 7.5 7 9 4-1.5 7-4.5 7-9V5l-7-3z" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="mt-4 text-base font-semibold">RGPD conforme</h3>
+        <p class="mt-1 text-sm text-slate-400">DPA accepté à l'inscription, registre art. 30, droit à l'effacement intégré.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-teal-500/20">
+          <svg class="h-5 w-5 text-teal-300" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="10" cy="10" r="8"/><path d="M2 10h16M10 2c2.5 2 3.5 5 3.5 8s-1 6-3.5 8c-2.5-2-3.5-5-3.5-8s1-6 3.5-8z"/></svg>
+        </div>
+        <h3 class="mt-4 text-base font-semibold">Hébergement France</h3>
+        <p class="mt-1 text-sm text-slate-400">Supabase Paris, Vercel CDG. Aucun transfert de Donnée patient hors UE.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-teal-500/20">
+          <svg class="h-5 w-5 text-teal-300" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="9" width="12" height="9" rx="1"/><path d="M7 9V6a3 3 0 0 1 6 0v3"/></svg>
+        </div>
+        <h3 class="mt-4 text-base font-semibold">Chiffrement de bout en bout</h3>
+        <p class="mt-1 text-sm text-slate-400">TLS 1.3 en transit, AES-256 au repos, isolation Row-Level Security par officine.</p>
+      </div>
+      <div class="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur">
+        <div class="grid h-10 w-10 place-items-center rounded-lg bg-teal-500/20">
+          <svg class="h-5 w-5 text-teal-300" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2l8 4v5c0 4-3 7-8 9-5-2-8-5-8-9V6l8-4z" stroke-linejoin="round"/><path d="M7 10l2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <h3 class="mt-4 text-base font-semibold">IA française Mistral</h3>
+        <p class="mt-1 text-sm text-slate-400">Notre OCR utilise un modèle français hébergé en France, jamais d'envoi outre-Atlantique.</p>
+      </div>
+    </div>
+    <div class="mt-12 flex justify-center">
+      <a href="/securite" class="inline-flex items-center gap-2 text-sm font-medium text-teal-300 hover:text-teal-200">
+        Voir notre politique de sécurité complète
+        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- TÉMOIGNAGE                                                   -->
+<!-- ========================================================== -->
+<section class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <figure>
+      <svg class="mx-auto h-10 w-10 text-teal-500" viewBox="0 0 24 24" fill="currentColor"><path d="M9.5 6C5.5 6 3 9 3 13c0 3 2 5 5 5v-3c-1.5 0-2-1-2-2 0-2 1.5-3 3.5-3V6zM18 6c-4 0-6.5 3-6.5 7 0 3 2 5 5 5v-3c-1.5 0-2-1-2-2 0-2 1.5-3 3.5-3V6z"/></svg>
+      <blockquote class="mt-8 text-center text-2xl font-medium text-balance text-slate-900 sm:text-3xl">
+        En deux semaines, on a arrêté le cahier de transmission et le groupe WhatsApp.
+        L'équipe sait quoi faire en arrivant, et moi je vois ce qui se passe même quand
+        je ne suis pas à l'officine.
+      </blockquote>
+      <figcaption class="mt-8 flex items-center justify-center gap-4">
+        <div class="h-12 w-12 rounded-full bg-gradient-to-br from-teal-300 to-cyan-200"></div>
+        <div class="text-left">
+          <p class="text-sm font-semibold text-slate-900">Dr. Sophie B.</p>
+          <p class="text-sm text-slate-500">Titulaire — Pharmacie pilote, Nice</p>
+        </div>
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- PRICING                                                      -->
+<!-- ========================================================== -->
+<section id="tarifs" class="bg-slate-50 py-24 sm:py-32">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="mx-auto max-w-3xl text-center">
+      <span class="text-sm font-semibold uppercase tracking-wider text-teal-700">Tarifs</span>
+      <h2 class="mt-4 text-3xl font-bold tracking-tight text-balance text-slate-900 sm:text-5xl">
+        Une formule par taille d'équipe.<br/>Toutes les fonctionnalités incluses.
+      </h2>
+      <p class="mt-6 text-lg text-slate-600">
+        Tarif Early Adopter <strong>-40 % à vie</strong> pour les 20 premières officines.
+        30 jours d'essai, CB validée à l'inscription, 0 € prélevés avant J+30.
+      </p>
+    </div>
+
+    <div class="mt-16 grid gap-6 lg:grid-cols-3">
+      <!-- PO -->
+      <div class="flex flex-col rounded-3xl border border-slate-200 bg-white p-8 card-shadow">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">PO <span class="font-normal text-slate-500">— Petite Officine</span></h3>
+          <p class="mt-1 text-sm text-slate-500">≤ 3 comptes équipe</p>
+        </div>
+        <div class="mt-6 flex items-baseline gap-2">
+          <span class="text-5xl font-bold tracking-tight text-slate-900">23,40&nbsp;€</span>
+          <span class="text-sm text-slate-500">HT/mois</span>
+        </div>
+        <p class="mt-1 text-sm text-slate-400"><span class="line-through">39 €</span> au tarif catalogue</p>
+        <a href="/signup?tier=po&source=tarifs" class="mt-8 inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-50">
+          Démarrer 30 jours gratuits
+        </a>
+        <ul class="mt-8 space-y-3 border-t border-slate-100 pt-6 text-sm text-slate-700">
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Tâches et transmissions d'équipe</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Ordonnances avec OCR Mistral (France)</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Ruptures CIP13 et alertes ANSM</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Locations matériel + photos</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Salon textuel d'équipe</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Planning et congés</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Support email sous 24 h</li>
+        </ul>
+      </div>
+
+      <!-- OTM (highlighted) -->
+      <div class="relative flex flex-col rounded-3xl border border-teal-300 bg-white p-8 ring-teal lg:-mt-4">
+        <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 px-4 py-1 text-xs font-semibold text-white">Recommandé</span>
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">OTM <span class="font-normal text-slate-500">— Officine Taille Moyenne</span></h3>
+          <p class="mt-1 text-sm text-slate-500">4 à 8 comptes équipe</p>
+        </div>
+        <div class="mt-6 flex items-baseline gap-2">
+          <span class="text-5xl font-bold tracking-tight text-slate-900">59,40&nbsp;€</span>
+          <span class="text-sm text-slate-500">HT/mois</span>
+        </div>
+        <p class="mt-1 text-sm text-slate-400"><span class="line-through">99 €</span> au tarif catalogue</p>
+        <a href="/signup?tier=otm&source=tarifs" class="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-teal-600 to-cyan-600 px-5 py-3 text-sm font-semibold text-white shadow-md transition hover:opacity-90">
+          Démarrer 30 jours gratuits
+        </a>
+        <ul class="mt-8 space-y-3 border-t border-slate-100 pt-6 text-sm text-slate-700">
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Toutes les fonctionnalités de PO</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Jusqu'à 8 comptes équipe</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Support prioritaire sous 24 h</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Onboarding équipe en visio (30 min)</li>
+        </ul>
+      </div>
+
+      <!-- GO -->
+      <div class="flex flex-col rounded-3xl border border-slate-200 bg-white p-8 card-shadow">
+        <div>
+          <h3 class="text-lg font-bold text-slate-900">GO <span class="font-normal text-slate-500">— Grande Officine</span></h3>
+          <p class="mt-1 text-sm text-slate-500">9 comptes équipe et +</p>
+        </div>
+        <div class="mt-6 flex items-baseline gap-2">
+          <span class="text-5xl font-bold tracking-tight text-slate-900">77,40&nbsp;€</span>
+          <span class="text-sm text-slate-500">HT/mois</span>
+        </div>
+        <p class="mt-1 text-sm text-slate-400"><span class="line-through">129 €</span> au tarif catalogue</p>
+        <a href="/signup?tier=go&source=tarifs" class="mt-8 inline-flex items-center justify-center gap-2 rounded-full border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-900 transition hover:bg-slate-50">
+          Démarrer 30 jours gratuits
+        </a>
+        <ul class="mt-8 space-y-3 border-t border-slate-100 pt-6 text-sm text-slate-700">
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Toutes les fonctionnalités de OTM</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Comptes équipe illimités</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Support prioritaire renforcé</li>
+          <li class="flex gap-2"><svg class="mt-0.5 h-4 w-4 shrink-0 text-teal-600" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 8l3 3 7-7" stroke-linecap="round" stroke-linejoin="round"/></svg>Hotline directe fondateur</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="mx-auto mt-12 max-w-3xl text-center text-base text-slate-600">
+      Une seule différence entre les formules : <strong>le nombre de comptes</strong>.
+      PO, OTM ou GO — vous accédez aux mêmes modules.
+    </p>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- FAQ                                                          -->
+<!-- ========================================================== -->
+<section id="faq" class="bg-white py-24 sm:py-32">
+  <div class="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+    <div class="text-center">
+      <span class="text-sm font-semibold uppercase tracking-wider text-teal-700">FAQ</span>
+      <h2 class="mt-4 text-3xl font-bold tracking-tight text-balance text-slate-900 sm:text-4xl">
+        Les questions qu'on nous pose le plus
+      </h2>
+    </div>
+    <div class="mt-12 space-y-3">
+      <details class="group rounded-2xl border border-slate-200 bg-white">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 text-left text-base font-semibold text-slate-900">
+          Comment fonctionne l'essai gratuit ?
+          <svg class="h-5 w-5 text-slate-400 transition group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-600">
+          30 jours d'accès complet à toutes les fonctionnalités. Nous demandons votre carte bancaire
+          à l'inscription pour valider votre compte (standard SaaS B2B), mais
+          <strong>0 € sont prélevés pendant 30 jours</strong>. Premier prélèvement au tarif Early
+          Adopter -40 % à vie le 31ᵉ jour, sauf annulation.
+        </div>
+      </details>
+      <details class="group rounded-2xl border border-slate-200 bg-white">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 text-left text-base font-semibold text-slate-900">
+          Comment être sûr que mon équipe va l'adopter ?
+          <svg class="h-5 w-5 text-slate-400 transition group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-600">
+          C'est la question la plus fréquente. 40 % des pharmaciens nous l'ont posée pendant
+          notre enquête. PharmaWorkspace est conçu pour qu'un préparateur l'utilise sans
+          formation. L'essai inclut un onboarding équipe en visio gratuite (30 min) et un widget
+          de missions guide chaque membre dans la prise en main pendant la première semaine.
+        </div>
+      </details>
+      <details class="group rounded-2xl border border-slate-200 bg-white">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 text-left text-base font-semibold text-slate-900">
+          Mes données patient quittent-elles l'Europe ?
+          <svg class="h-5 w-5 text-slate-400 transition group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-600">
+          Non. Hébergement Supabase Paris, OCR Mistral France. Aucun transfert hors UE.
+        </div>
+      </details>
+      <details class="group rounded-2xl border border-slate-200 bg-white">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 text-left text-base font-semibold text-slate-900">
+          PharmaWorkspace remplace-t-il mon LGO ?
+          <svg class="h-5 w-5 text-slate-400 transition group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-600">
+          Non, et c'est volontaire. Votre LGO (Winpharma, LGPI, LEO, Smart Rx…) gère la vente,
+          le tiers payant, la traçabilité. PharmaWorkspace gère l'organisation interne de votre
+          équipe : qui fait quoi, qui transmet quoi à qui, où en sont vos ruptures, qui a loué
+          quel matériel. Les deux outils coexistent sans conflit.
+        </div>
+      </details>
+      <details class="group rounded-2xl border border-slate-200 bg-white">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 text-left text-base font-semibold text-slate-900">
+          Comment annuler ?
+          <svg class="h-5 w-5 text-slate-400 transition group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-600">
+          Dans votre compte → Facturation → Annuler l'abonnement. Si vous annulez avant J+30,
+          0 € prélevés. Si après, prélèvement annulé pour la prochaine échéance.
+        </div>
+      </details>
+      <details class="group rounded-2xl border border-slate-200 bg-white">
+        <summary class="flex cursor-pointer items-center justify-between gap-4 p-6 text-left text-base font-semibold text-slate-900">
+          Y a-t-il une remise pour les pharmacies en groupement ?
+          <svg class="h-5 w-5 text-slate-400 transition group-open:rotate-180" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6l4 4 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </summary>
+        <div class="border-t border-slate-100 px-6 py-4 text-sm leading-relaxed text-slate-600">
+          Si votre groupement (Giphar, Aprium, Giropharm, Pharmavie, Totum, Pharmuni et autres)
+          souhaite déployer PharmaWorkspace sur plusieurs officines, nous pouvons mettre en place
+          un accord cadre avec conditions tarifaires adaptées. Écrivez à
+          <a href="mailto:contact@pharmaworkspace.fr" class="font-medium text-teal-700 underline-offset-4 hover:underline">contact@pharmaworkspace.fr</a>
+          en mentionnant votre groupement.
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- CTA FINAL                                                    -->
+<!-- ========================================================== -->
+<section class="relative overflow-hidden bg-gradient-to-br from-teal-600 via-teal-500 to-cyan-500 py-24 text-white sm:py-32">
+  <div aria-hidden="true" class="absolute inset-0 bg-[radial-gradient(circle_at_top,white,transparent_60%)] opacity-10"></div>
+  <div class="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold tracking-tight text-balance sm:text-5xl lg:text-6xl">
+      Prêt à libérer votre équipe ?
+    </h2>
+    <p class="mt-6 text-lg text-pretty text-teal-50 sm:text-xl">
+      30 jours d'essai. 0 € prélevés avant J+30. Annulable en 2 clics.
+    </p>
+    <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
+      <a href="/signup?source=cta_final" class="inline-flex w-full items-center justify-center gap-2 rounded-full bg-white px-7 py-4 text-base font-semibold text-teal-700 shadow-lg transition hover:bg-teal-50 sm:w-auto">
+        Démarrer maintenant
+        <svg class="h-4 w-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8h10M9 4l4 4-4 4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <a href="/demo" class="text-base font-medium text-white/90 transition hover:text-white">
+        ou réserver 15 min avec un fondateur →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== -->
+<!-- FOOTER                                                       -->
+<!-- ========================================================== -->
+<footer class="border-t border-slate-200 bg-slate-50 py-16">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="grid gap-12 lg:grid-cols-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="grid h-8 w-8 place-items-center rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 text-sm font-bold text-white">P</span>
+          <span class="text-base font-semibold tracking-tight text-slate-900">PharmaWorkspace</span>
+        </div>
+        <p class="mt-4 text-sm text-slate-600">L'espace partagé des équipes officinales françaises.</p>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Produit</p>
+        <ul class="mt-4 space-y-2 text-sm text-slate-700">
+          <li><a href="#produit" class="transition hover:text-slate-900">Modules</a></li>
+          <li><a href="/tarifs" class="transition hover:text-slate-900">Tarifs</a></li>
+          <li><a href="/demo" class="transition hover:text-slate-900">Réserver une démo</a></li>
+          <li><a href="/changelog" class="transition hover:text-slate-900">Changelog</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Légal</p>
+        <ul class="mt-4 space-y-2 text-sm text-slate-700">
+          <li><a href="/securite" class="transition hover:text-slate-900">Sécurité</a></li>
+          <li><a href="/privacy" class="transition hover:text-slate-900">Politique de confidentialité</a></li>
+          <li><a href="/conditions-generales" class="transition hover:text-slate-900">Conditions Générales</a></li>
+          <li><a href="/dpa" class="transition hover:text-slate-900">Accord de Sous-Traitance (DPA)</a></li>
+          <li><a href="/cookies" class="transition hover:text-slate-900">Cookies</a></li>
+          <li><a href="/mentions-legales" class="transition hover:text-slate-900">Mentions légales</a></li>
+        </ul>
+      </div>
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-wider text-slate-400">Contact</p>
+        <ul class="mt-4 space-y-2 text-sm text-slate-700">
+          <li><a href="mailto:contact@pharmaworkspace.fr" class="transition hover:text-slate-900">contact@pharmaworkspace.fr</a></li>
+          <li><a href="mailto:dpo@pharmaworkspace.fr" class="transition hover:text-slate-900">dpo@pharmaworkspace.fr</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-slate-200 pt-8 text-xs text-slate-500 sm:flex-row">
+      <p>© 2026 PharmaWorkspace. Tous droits réservés.</p>
+      <p>Hébergé en France · Conforme RGPD · IA française (Mistral)</p>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
